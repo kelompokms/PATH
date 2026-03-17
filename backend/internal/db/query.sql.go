@@ -9,20 +9,116 @@ import (
 	"context"
 )
 
-const listMapel = `-- name: ListMapel :many
-SELECT id, name FROM mapel
+const listKelas = `-- name: ListKelas :many
+select id, nama, pengajar, kode, dibuat from kelas
 `
 
-func (q *Queries) ListMapel(ctx context.Context) ([]Mapel, error) {
-	rows, err := q.db.Query(ctx, listMapel)
+func (q *Queries) ListKelas(ctx context.Context) ([]Kela, error) {
+	rows, err := q.db.Query(ctx, listKelas)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Mapel
+	var items []Kela
 	for rows.Next() {
-		var i Mapel
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		var i Kela
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nama,
+			&i.Pengajar,
+			&i.Kode,
+			&i.Dibuat,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listMurid = `-- name: ListMurid :many
+select id, id_pengguna, id_kelas, bergabung from murid where id_kelas = $1
+`
+
+func (q *Queries) ListMurid(ctx context.Context, idKelas int32) ([]Murid, error) {
+	rows, err := q.db.Query(ctx, listMurid, idKelas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Murid
+	for rows.Next() {
+		var i Murid
+		if err := rows.Scan(
+			&i.ID,
+			&i.IDPengguna,
+			&i.IDKelas,
+			&i.Bergabung,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listPengguna = `-- name: ListPengguna :many
+select id, nama, email, telepon, password, dibuat from pengguna
+`
+
+func (q *Queries) ListPengguna(ctx context.Context) ([]Pengguna, error) {
+	rows, err := q.db.Query(ctx, listPengguna)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Pengguna
+	for rows.Next() {
+		var i Pengguna
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nama,
+			&i.Email,
+			&i.Telepon,
+			&i.Password,
+			&i.Dibuat,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listPost = `-- name: ListPost :many
+select id, nama, deskripsi, id_kelas, tipe from post where id_kelas = $1
+`
+
+func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
+	rows, err := q.db.Query(ctx, listPost, idKelas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Post
+	for rows.Next() {
+		var i Post
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nama,
+			&i.Deskripsi,
+			&i.IDKelas,
+			&i.Tipe,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

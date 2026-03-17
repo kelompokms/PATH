@@ -5,18 +5,83 @@
 package db
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Mapel struct {
-	ID   int32
-	Name pgtype.Text
+type TipeMateri string
+
+const (
+	TipeMateriKuis   TipeMateri = "kuis"
+	TipeMateriMateri TipeMateri = "materi"
+	TipeMateriTugas  TipeMateri = "tugas"
+)
+
+func (e *TipeMateri) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = TipeMateri(s)
+	case string:
+		*e = TipeMateri(s)
+	default:
+		return fmt.Errorf("unsupported scan type for TipeMateri: %T", src)
+	}
+	return nil
 }
 
-type User struct {
-	UserID   int32
-	Name     pgtype.Text
-	Email    pgtype.Text
-	Phone    pgtype.Text
-	Password pgtype.Text
+type NullTipeMateri struct {
+	TipeMateri TipeMateri
+	Valid      bool // Valid is true if TipeMateri is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullTipeMateri) Scan(value interface{}) error {
+	if value == nil {
+		ns.TipeMateri, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.TipeMateri.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullTipeMateri) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.TipeMateri), nil
+}
+
+type Kela struct {
+	ID       int32
+	Nama     string
+	Pengajar int32
+	Kode     string
+	Dibuat   pgtype.Timestamp
+}
+
+type Murid struct {
+	ID         int32
+	IDPengguna int32
+	IDKelas    int32
+	Bergabung  pgtype.Timestamp
+}
+
+type Pengguna struct {
+	ID       int32
+	Nama     string
+	Email    string
+	Telepon  string
+	Password string
+	Dibuat   pgtype.Timestamp
+}
+
+type Post struct {
+	ID        int32
+	Nama      string
+	Deskripsi string
+	IDKelas   int32
+	Tipe      TipeMateri
 }
