@@ -21,7 +21,8 @@ func main() {
 	queries := db.New(pool)
 
 	e := echo.New()
-	e.Use(middleware.RequestLogger())
+
+	e.Use(middleware.RequestLoggerWithConfig(utils.RequestLoggerConfig))
 
 	app := handler.NewApp(e, queries)
 	app.Start()

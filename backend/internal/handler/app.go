@@ -12,10 +12,12 @@ type App struct {
 }
 
 func NewApp(e *echo.Echo, db *db.Queries) *App {
-	return &App{
+	app := &App{
 		e:  e,
 		db: db,
 	}
+	app.registerRoutes()
+	return app
 }
 
 func (app *App) Start() {
