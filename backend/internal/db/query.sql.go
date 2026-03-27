@@ -9,6 +9,27 @@ import (
 	"context"
 )
 
+const createPengguna = `-- name: CreatePengguna :exec
+insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4)
+`
+
+type CreatePenggunaParams struct {
+	Nama     string
+	Email    string
+	Telepon  string
+	Password string
+}
+
+func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) error {
+	_, err := q.db.Exec(ctx, createPengguna,
+		arg.Nama,
+		arg.Email,
+		arg.Telepon,
+		arg.Password,
+	)
+	return err
+}
+
 const getPengguna = `-- name: GetPengguna :one
 select id, nama, email, telepon, password, dibuat from pengguna where id = $1
 `

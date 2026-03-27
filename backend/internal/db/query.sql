@@ -12,3 +12,6 @@ select * from pengguna;
 
 -- name: GetPengguna :one
 select * from pengguna where id = $1;
+
+-- name: CreatePengguna :exec
+insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4);
