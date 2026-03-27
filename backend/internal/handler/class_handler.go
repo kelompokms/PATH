@@ -39,7 +39,7 @@ func (app *App) getClasses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) getClass(w http.ResponseWriter, r *http.Request) {
-	kode := chi.URLParam(r, "kode")
+	kode := chi.URLParam(r, "code")
 	res, err := app.db.GetKelas(r.Context(), kode)
 	if err != nil {
 		log.Println(err)

@@ -21,8 +21,8 @@ func (app *App) registerRoutes() {
 		rp.Patch("/user", app.patchUser)
 		rp.Get("/class", app.getClasses)
 		rp.Post("/class", app.createClass)
-		rp.Get("/class/:code", app.getClass)
-		rp.Put("/class/:code/:postId", app.putClass)
+		rp.Get("/class/{code}", app.getClass)
+		rp.Put("/class/{code}/{postId}", app.putClass)
 	})
 
 }
