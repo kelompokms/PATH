@@ -7,7 +7,10 @@
     h1 { @apply text-2xl mt-0; }
     h2 { @apply text-xl font-mono; }
     h3 { @apply text-lg; }
-    hr { @apply text-white/25 my-6 };
+    hr { @apply text-white/25 my-6 }
+    table,tr,th,td {
+        @apply border border-white/25 p-2 rounded
+    }
 }
 
 @layer components {

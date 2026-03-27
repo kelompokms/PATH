@@ -1,115 +1,217 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="./style.css">
-	<title>PATH REST API Documentation</title>
-</head>
-<body class="bg-[#181616] text-white/80 p-8 max-w-6xl mx-auto leading-7">
-    <header class="text-center">
-        <h1>PATH REST API Documentation</h1>
-    </header>
-    <main>
-        <div>
-            <hr>
-            <h2>
-                <span class="method get">get</span>
-                /
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./style.css" />
+        <title>PATH REST API Documentation</title>
+    </head>
+    <body class="bg-[#181616] text-white/80 p-8 max-w-6xl mx-auto leading-7">
+        <header class="text-center">
+            <h1>PATH REST API Documentation</h1>
+        </header>
+        <main>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method get">get</span>
+                    /
+                </h2>
+                <p><i>Tidak ada fungsi khusus.</i></p>
+                <h3>Argumen</h3>
+                <p><i>Tidak ada argumen. </i></p>
+                <h3>Contoh Response</h3>
+                <code>hello PATH!</code>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method post">post</span>
-                /login
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method post">post</span>
+                    /login
+                </h2>
+                <p>
+                    Login untuk mendapatkan autentikasi. Autentikasi berbasis
+                    dengan JWT token. Jika belum membuat user maka beralih ke
+                    <code>/register</code>
+                </p>
+                <h3>Argumen</h3>
+                <table>
+                    <tr>
+                        <th>nama</th>
+                        <th>deskripsi</th>
+                        <th>tipe</th>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>berisikan alamat email valid</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>password</td>
+                        <td>berisikan password</td>
+                        <td>string</td>
+                    </tr>
+                </table>
+                <h3>Contoh Response</h3>
+                <p>
+                    <code>Berhasil login!</code>
+                    <br>
+                    dan mengembalikan <code>jwt</code> cookie
+                </p>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method post">post</span>
-                /logout
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method post">post</span>
+                    /logout
+                </h2>
+                <p>
+                    untuk menghapus cookie autentikasi
+                </p>
+                <h3>Contoh Response</h3>
+                <p>
+                    <code>berhasil logout!</code>
+                </p>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method post">post</span>
-                /register
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method post">post</span>
+                    /register
+                </h2>
+                <p>
+                    Login untuk mendapatkan autentikasi. Autentikasi berbasis
+                    dengan JWT token. Jika belum membuat user maka beralih ke
+                    <code>/register</code>.
+                </p>
+                <h3>Argumen</h3>
+                <table>
+                    <tr>
+                        <th>nama</th>
+                        <th>deskripsi</th>
+                        <th>tipe</th>
+                    </tr>
+                    <tr>
+                        <td>nama</td>
+                        <td>Berisikan nama lengkap dengan maksimal 128 karakter</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>berisikan alamat email valid maksimal 255 karakter</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>password</td>
+                        <td>berisikan password bebas</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td>telepon</td>
+                        <td>berisikan nomor telepon valid (tanpa karakter)</td>
+                        <td>string</td>
+                    </tr>
+                </table>
+                <h3>Contoh Response</h3>
+                <table>
+                    <tr>
+                        <th>kode status</th>
+                        <th>isi</th>
+                        <th>alasan</th>
+                    </tr>
+                    <tr>
+                        <td>400</td>
+                        <td>email sudah terdaftarkan!</td>
+                        <td>email sudah ada di dalam database (duplikat)</td>
+                    </tr>
+                    <tr>
+                        <td>400</td>
+                        <td>Input tidak lengkap!</td>
+                        <td>Salah satu input belum terisi</td>
+                    </tr>
+                    <tr>
+                        <td>400</td>
+                        <td>Input tidak valid!</td>
+                        <td>panjang karakter melebihi batas</td>
+                    </tr>
+                    <tr>
+                        <td>200</td>
+                        <td>Sukses mendaftarkan pengguna</td>
+                        <td>valid dan benar</td>
+                    </tr>
+                </table>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method get">get</span>
-                /user
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method get">get</span>
+                    /user
+                </h2>
+                <p>
+                    Untuk mendapatkan informasi lengkap pengguna.
+                </p>
+                <h3>Contoh Response</h3>
+                <pre>
+{
+    "id": 1,
+    "nama": "budiman",
+    "email": "budiman@budi.com",
+    "telepon": "085123456"
+}
+                </pre>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method patch">patch</span>
-                /user
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method patch">patch</span>
+                    /user
+                </h2>
+                <p>
+                    untuk mengubah informasi pengguna
+                </p>
+                <h3>Contoh Response</h3>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method get">get</span>
-                /class
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method get">get</span>
+                    /class
+                </h2>
+                <p>
+                    mendapatkan semua kelas yang tergabung pengguna
+                </p>
+                <h3>Contoh Response</h3>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method get">get</span>
-                /class/:code
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method get">get</span>
+                    /class/:code
+                </h2>
+                <p>
+                    untuk mengambil informasi suatu kelas yang tergabung
+                </p>
+                <h3>Contoh Response</h3>
+            </div>
 
-        <div>
-            <hr>
-            <h2>
-                <span class="method put">put</span>
-                /class/:code/:postID
-            </h2>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum suscipit magni adipisci! Nostrum dolorum rerum nihil id? Distinctio necessitatibus dolorem nesciunt! Officiis sed architecto voluptatem quam fuga eius, optio ratione.</p>
-            <h3>Contoh Request</h3>
-            <h3>Contoh Response</h3>
-        </div>
-
-    </main>
-</body>
+            <div>
+                <hr />
+                <h2>
+                    <span class="method put">put</span>
+                    /class/:code/:postID
+                </h2>
+                <p>
+                    untuk mengubah post dari sebuah kelas
+                </p>
+                <h3>Contoh Response</h3>
+            </div>
+        </main>
+    </body>
 </html>
