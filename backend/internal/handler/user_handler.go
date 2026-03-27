@@ -8,6 +8,7 @@ import (
 	"path_project/internal/db"
 	"path_project/internal/utils"
 	"regexp"
+	"time"
 )
 
 func (app *App) register(w http.ResponseWriter, r *http.Request) {
@@ -18,6 +19,7 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 	telepon := r.FormValue("telepon")
 	password := r.FormValue("password")
 
+	// validasi standar input
 	if nama == "" || email == "" || telepon == "" || password == "" {
 		http.Error(w, "Input tidak lengkap!", http.StatusBadRequest)
 		return
@@ -28,11 +30,13 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// validasi nomer telepon
 	if numberRegex.MatchString(telepon) == false {
 		http.Error(w, "telepon tidak berupa angka!", http.StatusBadRequest)
 		return
 	}
 
+	// validasi email
 	_, err := mail.ParseAddress(email)
 	if err != nil {
 		http.Error(w, "email tidak valid!", http.StatusBadRequest)
@@ -45,7 +49,8 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = app.db.CreatePengguna(context.Background(), db.CreatePenggunaParams{
+	// insert ke database
+	userId, err := app.db.CreatePengguna(context.Background(), db.CreatePenggunaParams{
 		Nama:     nama,
 		Email:    email,
 		Telepon:  telepon,
@@ -57,6 +62,13 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "email sudah terdaftarkan!", http.StatusBadRequest)
 		return
 	}
+
+	_, tokenString, _ := app.tokenAuth.Encode(map[string]interface{}{
+		"user_id": userId,
+		"exp":     time.Now().Add(time.Hour * 168).Unix(),
+	})
+
+	utils.SetCookie(w, tokenString)
 
 	w.Write([]byte("Sukses mendaftarkan pengguna"))
 }

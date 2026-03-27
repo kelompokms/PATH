@@ -1,9 +1,19 @@
 package handler
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
+)
 
 func (app *App) registerRoutes() {
-	app.r.Get("/", app.getIndex)
+
+	app.r.Group(func(rr chi.Router) {
+		rr.Use(jwtauth.Verifier(app.tokenAuth))
+		rr.Use(jwtauth.Authenticator(app.tokenAuth))
+		rr.Get("/", app.getIndex)
+	})
 
 	app.r.Get("/user", app.getUser)
 	app.r.Patch("/user", app.putUser)
