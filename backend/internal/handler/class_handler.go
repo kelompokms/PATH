@@ -21,6 +21,11 @@ func (app *App) getClasses(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Gagal mengambil informasi kelas", http.StatusInternalServerError)
 		return
 	}
+	if len(res) <= 0 {
+		w.Header().Set("content-type", "application/json")
+		w.Write([]byte("[]"))
+		return
+	}
 
 	jsonString, err := json.Marshal(res)
 	if err != nil {
@@ -57,6 +62,8 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	_, claims, _ := jwtauth.FromContext(r.Context())
 	userID := int32(claims["user_id"].(float64))
 
+	log.Println(userID)
+
 	nama := r.FormValue("nama")
 	subjek := r.FormValue("subjek")
 
@@ -75,10 +82,16 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := app.db.CreateKelas(r.Context(), db.CreateKelasParams{
+	validUserID, err := app.db.ValidatePenggunaID(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "gagal memvalidasi pengguna", http.StatusInternalServerError)
+		return
+	}
+
+	err = app.db.CreateKelas(r.Context(), db.CreateKelasParams{
 		Nama:     nama,
 		Subjek:   subjek,
-		Pengajar: userID,
+		Pengajar: validUserID,
 		Kode:     utils.NewHashCode(),
 	})
 

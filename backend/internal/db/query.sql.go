@@ -106,9 +106,9 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
 }
 
 const listKelas = `-- name: ListKelas :many
-SELECT id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
 UNION
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat, murid.id, id_pengguna, id_kelas, bergabung FROM kelas JOIN murid ON murid.id_kelas = kelas.id
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.id_kelas = kelas.id
 WHERE murid.id_pengguna = $1
 `
 
@@ -227,4 +227,14 @@ func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const validatePenggunaID = `-- name: ValidatePenggunaID :one
+select id from pengguna where id = $1
+`
+
+func (q *Queries) ValidatePenggunaID(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRow(ctx, validatePenggunaID, id)
+	err := row.Scan(&id)
+	return id, err
 }

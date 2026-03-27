@@ -5,9 +5,9 @@ select * from murid where id_kelas = $1;
 select * from post where id_kelas = $1;
 
 -- name: ListKelas :many
-SELECT * FROM kelas WHERE kelas.pengajar = $1
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
 UNION
-SELECT * FROM kelas JOIN murid ON murid.id_kelas = kelas.id
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.id_kelas = kelas.id
 WHERE murid.id_pengguna = $1;
 
 -- name: GetKelas :one
@@ -21,6 +21,9 @@ select * from pengguna;
 
 -- name: GetPengguna :one
 select * from pengguna where id = $1;
+
+-- name: ValidatePenggunaID :one
+select id from pengguna where id = $1;
 
 -- name: CheckPengguna :one
 select id, password from pengguna where email = $1;
