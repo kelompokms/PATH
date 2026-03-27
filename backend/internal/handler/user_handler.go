@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/mail"
@@ -9,7 +9,14 @@ import (
 	"path_project/internal/utils"
 	"regexp"
 	"time"
+
+	"github.com/go-chi/jwtauth/v5"
 )
+
+type tokenStruct struct {
+	UserID int   `json:"user_id"`
+	Exp    int64 `json:"exp"`
+}
 
 func (app *App) register(w http.ResponseWriter, r *http.Request) {
 	numberRegex := regexp.MustCompile(`^[0-9]+$`)
@@ -50,7 +57,7 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// insert ke database
-	userId, err := app.db.CreatePengguna(context.Background(), db.CreatePenggunaParams{
+	userId, err := app.db.CreatePengguna(r.Context(), db.CreatePenggunaParams{
 		Nama:     nama,
 		Email:    email,
 		Telepon:  telepon,
@@ -74,6 +81,25 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) getUser(w http.ResponseWriter, r *http.Request) {
+	_, claims, err := jwtauth.FromContext(r.Context())
+	if err != nil {
+		http.Error(w, "gagal parsing token", http.StatusInternalServerError)
+		return
+	}
+
+	userId := int32(claims["user_id"].(float64))
+	res, err := app.db.GetPengguna(r.Context(), userId)
+	if err != nil {
+		http.Error(w, "gagal mengambil data pengguna", http.StatusInternalServerError)
+		return
+	}
+
+	jsonString, err := json.Marshal(res)
+	if err != nil {
+		http.Error(w, "gagal menampilkan hasil", http.StatusInternalServerError)
+		return
+	}
+	w.Write(jsonString)
 }
 
 func (app *App) putUser(w http.ResponseWriter, r *http.Request) {

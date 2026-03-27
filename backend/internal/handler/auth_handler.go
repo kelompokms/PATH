@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"net/mail"
@@ -33,7 +32,7 @@ func (app *App) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, err := app.db.CheckPengguna(context.Background(), email)
+	res, err := app.db.CheckPengguna(r.Context(), email)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "email atau password salah!", http.StatusBadRequest)
