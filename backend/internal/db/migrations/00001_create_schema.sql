@@ -13,8 +13,9 @@ CREATE TABLE pengguna (
 CREATE TABLE kelas (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(64) NOT NULL,
+    subjek VARCHAR(64) NOT NULL,
     pengajar INTEGER REFERENCES pengguna (id) NOT NULL,
-    kode VARCHAR(6) NOT NULL,
+    kode VARCHAR(6) NOT NULL UNIQUE,
     dibuat TIMESTAMP DEFAULT NOW()
 );
 
@@ -24,6 +25,7 @@ CREATE TABLE murid (
     id_kelas INTEGER REFERENCES kelas (id) NOT NULL,
     bergabung TIMESTAMP DEFAULT NOW()
 );
+
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(128) NOT NULL,

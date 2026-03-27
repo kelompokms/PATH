@@ -57,6 +57,7 @@ func (ns NullTipeMateri) Value() (driver.Value, error) {
 type Kela struct {
 	ID       int32
 	Nama     string
+	Subjek   string
 	Pengajar int32
 	Kode     string
 	Dibuat   pgtype.Timestamp

@@ -5,7 +5,16 @@ select * from murid where id_kelas = $1;
 select * from post where id_kelas = $1;
 
 -- name: ListKelas :many
-select * from kelas;
+SELECT * FROM kelas WHERE kelas.pengajar = $1
+UNION
+SELECT * FROM kelas JOIN murid ON murid.id_kelas = kelas.id
+WHERE murid.id_pengguna = $1;
+
+-- name: GetKelas :one
+select * from kelas where kode = $1;
+
+-- name: CreateKelas :exec
+insert into kelas (nama, subjek, pengajar, kode) values ($1, $2, $3, $4);
 
 -- name: ListPengguna :many
 select * from pengguna;

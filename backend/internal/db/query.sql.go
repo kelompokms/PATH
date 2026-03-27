@@ -25,6 +25,27 @@ func (q *Queries) CheckPengguna(ctx context.Context, email string) (CheckPenggun
 	return i, err
 }
 
+const createKelas = `-- name: CreateKelas :exec
+insert into kelas (nama, subjek, pengajar, kode) values ($1, $2, $3, $4)
+`
+
+type CreateKelasParams struct {
+	Nama     string
+	Subjek   string
+	Pengajar int32
+	Kode     string
+}
+
+func (q *Queries) CreateKelas(ctx context.Context, arg CreateKelasParams) error {
+	_, err := q.db.Exec(ctx, createKelas,
+		arg.Nama,
+		arg.Subjek,
+		arg.Pengajar,
+		arg.Kode,
+	)
+	return err
+}
+
 const createPengguna = `-- name: CreatePengguna :one
 insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4) returning id
 `
@@ -48,6 +69,24 @@ func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) 
 	return id, err
 }
 
+const getKelas = `-- name: GetKelas :one
+select id, nama, subjek, pengajar, kode, dibuat from kelas where kode = $1
+`
+
+func (q *Queries) GetKelas(ctx context.Context, kode string) (Kela, error) {
+	row := q.db.QueryRow(ctx, getKelas, kode)
+	var i Kela
+	err := row.Scan(
+		&i.ID,
+		&i.Nama,
+		&i.Subjek,
+		&i.Pengajar,
+		&i.Kode,
+		&i.Dibuat,
+	)
+	return i, err
+}
+
 const getPengguna = `-- name: GetPengguna :one
 select id, nama, email, telepon, password, dibuat from pengguna where id = $1
 `
@@ -67,11 +106,14 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
 }
 
 const listKelas = `-- name: ListKelas :many
-select id, nama, pengajar, kode, dibuat from kelas
+SELECT id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
+UNION
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat, murid.id, id_pengguna, id_kelas, bergabung FROM kelas JOIN murid ON murid.id_kelas = kelas.id
+WHERE murid.id_pengguna = $1
 `
 
-func (q *Queries) ListKelas(ctx context.Context) ([]Kela, error) {
-	rows, err := q.db.Query(ctx, listKelas)
+func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]Kela, error) {
+	rows, err := q.db.Query(ctx, listKelas, pengajar)
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +124,7 @@ func (q *Queries) ListKelas(ctx context.Context) ([]Kela, error) {
 		if err := rows.Scan(
 			&i.ID,
 			&i.Nama,
+			&i.Subjek,
 			&i.Pengajar,
 			&i.Kode,
 			&i.Dibuat,
