@@ -9,17 +9,20 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
 )
 
 type App struct {
-	db *db.Queries
-	r  *chi.Mux
+	db        *db.Queries
+	r         *chi.Mux
+	tokenAuth *jwtauth.JWTAuth
 }
 
-func NewApp(r *chi.Mux, db *db.Queries) *App {
+func NewApp(r *chi.Mux, db *db.Queries, tokenAuth *jwtauth.JWTAuth) *App {
 	app := &App{
-		r:  r,
-		db: db,
+		r:         r,
+		db:        db,
+		tokenAuth: tokenAuth,
 	}
 	app.registerRoutes()
 	return app

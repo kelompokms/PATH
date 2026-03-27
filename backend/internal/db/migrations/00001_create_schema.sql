@@ -3,8 +3,8 @@ CREATE TYPE tipe_materi AS ENUM ('kuis', 'materi', 'tugas');
 
 CREATE TABLE pengguna (
     id SERIAL PRIMARY KEY,
-    nama VARCHAR(64) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    nama VARCHAR(128) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
     telepon VARCHAR(32) NOT NULL,
     password VARCHAR(255) NOT NULL,
     dibuat TIMESTAMP DEFAULT NOW()

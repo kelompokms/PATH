@@ -9,6 +9,45 @@ import (
 	"context"
 )
 
+const checkPengguna = `-- name: CheckPengguna :one
+select id, password from pengguna where email = $1
+`
+
+type CheckPenggunaRow struct {
+	ID       int32
+	Password string
+}
+
+func (q *Queries) CheckPengguna(ctx context.Context, email string) (CheckPenggunaRow, error) {
+	row := q.db.QueryRow(ctx, checkPengguna, email)
+	var i CheckPenggunaRow
+	err := row.Scan(&i.ID, &i.Password)
+	return i, err
+}
+
+const createPengguna = `-- name: CreatePengguna :one
+insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4) returning id
+`
+
+type CreatePenggunaParams struct {
+	Nama     string
+	Email    string
+	Telepon  string
+	Password string
+}
+
+func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) (int32, error) {
+	row := q.db.QueryRow(ctx, createPengguna,
+		arg.Nama,
+		arg.Email,
+		arg.Telepon,
+		arg.Password,
+	)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
 const getPengguna = `-- name: GetPengguna :one
 select id, nama, email, telepon, password, dibuat from pengguna where id = $1
 `

@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@layer base {
+    h1, h2, h3 {
+        @apply font-bold my-4 block;
+    }
+    h1 { @apply text-2xl mt-0; }
+    h2 { @apply text-xl font-mono; }
+    h3 { @apply text-lg; }
+    hr { @apply text-white/25 my-6 };
+}
+
+@layer components {
+    .method {
+        @apply border-2 rounded-sm px-2 inline-block uppercase;
+    }
+    .get { @apply text-purple-400; }
+    .put { @apply text-orange-400; }
+    .post { @apply text-green-400 ; }
+    .patch { @apply text-yellow-400 ; }
+    .delete { @apply text-red-400 ; }
+    .options { @apply text-blue-400 ; }
+}
