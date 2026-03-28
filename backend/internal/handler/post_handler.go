@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 	"path_project/internal/db"
 
@@ -18,17 +19,32 @@ func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if tipe != "kuis" || tipe != "materi" || tipe != "tugas" {
-		http.Error(w, "tipe tidak valid!", http.StatusBadRequest)
+	var TipeMateri db.TipeMateri
+
+	switch tipe {
+	case "kuis":
+		TipeMateri = db.TipeMateriKuis
+	case "materi":
+		TipeMateri = db.TipeMateriMateri
+	case "tugas":
+		TipeMateri = db.TipeMateriTugas
+	default:
+		http.Error(w, "Tipe materi tidak valid!", http.StatusBadRequest)
 		return
 	}
 
-	app.db.CreatePost(r.Context(), db.CreatePostParams{
+	err := app.db.CreatePost(r.Context(), db.CreatePostParams{
 		Nama:      nama,
 		Deskripsi: deskripsi,
 		KodeKelas: code,
-		Tipe:      db.TipeMateriKuis,
+		Tipe:      TipeMateri,
 	})
 
-	w.Write([]byte("GET"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "gagal membuat post", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte(tipe))
 }
