@@ -5,13 +5,14 @@ select * from murid where kode_kelas = $1;
 select * from post where kode_kelas = $1;
 
 -- name: ListKelas :many
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
 UNION
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
 WHERE murid.id_pengguna = $1;
 
 -- name: GetKelas :one
-select * from kelas where kode = $1;
+select k.id, k.nama as nama_kelas, subjek, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
+join pengguna p on p.id = k.pengajar where kode = $1;
 
 -- name: CreateKelas :exec
 insert into kelas (nama, subjek, pengajar, kode) values ($1, $2, $3, $4);

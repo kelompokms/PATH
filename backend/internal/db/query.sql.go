@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const checkPengguna = `-- name: CheckPengguna :one
@@ -91,17 +93,27 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
 }
 
 const getKelas = `-- name: GetKelas :one
-select id, nama, subjek, pengajar, kode, dibuat from kelas where kode = $1
+select k.id, k.nama as nama_kelas, subjek, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
+join pengguna p on p.id = k.pengajar where kode = $1
 `
 
-func (q *Queries) GetKelas(ctx context.Context, kode string) (Kela, error) {
+type GetKelasRow struct {
+	ID           int32
+	NamaKelas    string
+	Subjek       string
+	NamaPengajar string
+	Kode         string
+	Dibuat       pgtype.Timestamp
+}
+
+func (q *Queries) GetKelas(ctx context.Context, kode string) (GetKelasRow, error) {
 	row := q.db.QueryRow(ctx, getKelas, kode)
-	var i Kela
+	var i GetKelasRow
 	err := row.Scan(
 		&i.ID,
-		&i.Nama,
+		&i.NamaKelas,
 		&i.Subjek,
-		&i.Pengajar,
+		&i.NamaPengajar,
 		&i.Kode,
 		&i.Dibuat,
 	)
@@ -127,26 +139,35 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
 }
 
 const listKelas = `-- name: ListKelas :many
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
 UNION
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
 WHERE murid.id_pengguna = $1
 `
 
-func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]Kela, error) {
+type ListKelasRow struct {
+	ID           int32
+	NamaKelas    string
+	Subjek       string
+	NamaPengguna string
+	Kode         string
+	Dibuat       pgtype.Timestamp
+}
+
+func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]ListKelasRow, error) {
 	rows, err := q.db.Query(ctx, listKelas, pengajar)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Kela
+	var items []ListKelasRow
 	for rows.Next() {
-		var i Kela
+		var i ListKelasRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.Nama,
+			&i.NamaKelas,
 			&i.Subjek,
-			&i.Pengajar,
+			&i.NamaPengguna,
 			&i.Kode,
 			&i.Dibuat,
 		); err != nil {
