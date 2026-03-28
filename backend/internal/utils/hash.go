@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"crypto/rand"
 	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
@@ -15,7 +16,9 @@ func HashPassword(password string) (string, error) {
 }
 
 func NewHashCode() string {
+	randStr := rand.Text()
+
 	h := sha1.New()
-	h.Write([]byte(fmt.Sprintf("%s:%d", GetSecret(), time.Now().UnixNano())))
+	h.Write([]byte(fmt.Sprintf("%s:%s:%d", GetSecret(), randStr, time.Now().UnixNano())))
 	return hex.EncodeToString(h.Sum(nil))[:6]
 }

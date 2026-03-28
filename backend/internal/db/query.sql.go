@@ -69,6 +69,27 @@ func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) 
 	return id, err
 }
 
+const createPost = `-- name: CreatePost :exec
+insert into post (nama, deskripsi, kode_kelas, tipe) values ($1, $2, $3, $4)
+`
+
+type CreatePostParams struct {
+	Nama      string
+	Deskripsi string
+	KodeKelas string
+	Tipe      TipeMateri
+}
+
+func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
+	_, err := q.db.Exec(ctx, createPost,
+		arg.Nama,
+		arg.Deskripsi,
+		arg.KodeKelas,
+		arg.Tipe,
+	)
+	return err
+}
+
 const getKelas = `-- name: GetKelas :one
 select id, nama, subjek, pengajar, kode, dibuat from kelas where kode = $1
 `
@@ -108,7 +129,7 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
 const listKelas = `-- name: ListKelas :many
 SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas WHERE kelas.pengajar = $1
 UNION
-SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.id_kelas = kelas.id
+SELECT kelas.id, nama, subjek, pengajar, kode, dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode
 WHERE murid.id_pengguna = $1
 `
 
@@ -140,11 +161,11 @@ func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]Kela, error)
 }
 
 const listMurid = `-- name: ListMurid :many
-select id, id_pengguna, id_kelas, bergabung from murid where id_kelas = $1
+select id, id_pengguna, kode_kelas, bergabung from murid where kode_kelas = $1
 `
 
-func (q *Queries) ListMurid(ctx context.Context, idKelas int32) ([]Murid, error) {
-	rows, err := q.db.Query(ctx, listMurid, idKelas)
+func (q *Queries) ListMurid(ctx context.Context, kodeKelas string) ([]Murid, error) {
+	rows, err := q.db.Query(ctx, listMurid, kodeKelas)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +176,7 @@ func (q *Queries) ListMurid(ctx context.Context, idKelas int32) ([]Murid, error)
 		if err := rows.Scan(
 			&i.ID,
 			&i.IDPengguna,
-			&i.IDKelas,
+			&i.KodeKelas,
 			&i.Bergabung,
 		); err != nil {
 			return nil, err
@@ -200,11 +221,11 @@ func (q *Queries) ListPengguna(ctx context.Context) ([]Pengguna, error) {
 }
 
 const listPost = `-- name: ListPost :many
-select id, nama, deskripsi, id_kelas, tipe from post where id_kelas = $1
+select id, nama, deskripsi, kode_kelas, tipe from post where kode_kelas = $1
 `
 
-func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
-	rows, err := q.db.Query(ctx, listPost, idKelas)
+func (q *Queries) ListPost(ctx context.Context, kodeKelas string) ([]Post, error) {
+	rows, err := q.db.Query(ctx, listPost, kodeKelas)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +237,7 @@ func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
 			&i.ID,
 			&i.Nama,
 			&i.Deskripsi,
-			&i.IDKelas,
+			&i.KodeKelas,
 			&i.Tipe,
 		); err != nil {
 			return nil, err

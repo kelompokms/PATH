@@ -22,6 +22,7 @@ func (app *App) registerRoutes() {
 		rp.Get("/class", app.getClasses)
 		rp.Post("/class", app.createClass)
 		rp.Get("/class/{code}", app.getClass)
+		rp.Post("/class/{code}", app.createPost)
 		rp.Put("/class/{code}/{postId}", app.putClass)
 	})
 

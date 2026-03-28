@@ -22,7 +22,7 @@ CREATE TABLE kelas (
 CREATE TABLE murid (
     id SERIAL PRIMARY KEY,
     id_pengguna INTEGER REFERENCES pengguna (id) NOT NULL,
-    id_kelas INTEGER REFERENCES kelas (id) NOT NULL,
+    kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
     bergabung TIMESTAMP DEFAULT NOW()
 );
 
@@ -30,7 +30,7 @@ CREATE TABLE post (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(128) NOT NULL,
     deskripsi VARCHAR(255) NOT NULL,
-    id_kelas INTEGER REFERENCES kelas (id) NOT NULL,
+    kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
     tipe tipe_materi NOT NULL
 );
 
