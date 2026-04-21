@@ -57,6 +57,7 @@ func (ns NullTipeMateri) Value() (driver.Value, error) {
 type Kela struct {
 	ID       int32
 	Nama     string
+	Subjek   string
 	Pengajar int32
 	Kode     string
 	Dibuat   pgtype.Timestamp
@@ -65,7 +66,7 @@ type Kela struct {
 type Murid struct {
 	ID         int32
 	IDPengguna int32
-	IDKelas    int32
+	KodeKelas  string
 	Bergabung  pgtype.Timestamp
 }
 
@@ -82,6 +83,6 @@ type Post struct {
 	ID        int32
 	Nama      string
 	Deskripsi string
-	IDKelas   int32
+	KodeKelas string
 	Tipe      TipeMateri
 }

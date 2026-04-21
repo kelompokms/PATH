@@ -18,11 +18,12 @@ func (app *App) registerRoutes() {
 		rp.Use(jwtauth.Authenticator(app.tokenAuth))
 
 		rp.Get("/user", app.getUser)
-		rp.Patch("/user", app.putUser)
+		rp.Patch("/user", app.patchUser)
 		rp.Get("/class", app.getClasses)
-		rp.Get("/class/:code", app.getClass)
-		rp.Post("/class/:code", app.postClass)
-		rp.Put("/class/:code/:postId", app.putClass)
+		rp.Post("/class", app.createClass)
+		rp.Get("/class/{code}", app.getClass)
+		rp.Post("/class/{code}", app.createPost)
+		rp.Put("/class/{code}/{postId}", app.putClass)
 	})
 
 }

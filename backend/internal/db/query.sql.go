@@ -7,6 +7,8 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const checkPengguna = `-- name: CheckPengguna :one
@@ -23,6 +25,27 @@ func (q *Queries) CheckPengguna(ctx context.Context, email string) (CheckPenggun
 	var i CheckPenggunaRow
 	err := row.Scan(&i.ID, &i.Password)
 	return i, err
+}
+
+const createKelas = `-- name: CreateKelas :exec
+insert into kelas (nama, subjek, pengajar, kode) values ($1, $2, $3, $4)
+`
+
+type CreateKelasParams struct {
+	Nama     string
+	Subjek   string
+	Pengajar int32
+	Kode     string
+}
+
+func (q *Queries) CreateKelas(ctx context.Context, arg CreateKelasParams) error {
+	_, err := q.db.Exec(ctx, createKelas,
+		arg.Nama,
+		arg.Subjek,
+		arg.Pengajar,
+		arg.Kode,
+	)
+	return err
 }
 
 const createPengguna = `-- name: CreatePengguna :one
@@ -48,6 +71,55 @@ func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) 
 	return id, err
 }
 
+const createPost = `-- name: CreatePost :exec
+insert into post (nama, deskripsi, kode_kelas, tipe) values ($1, $2, $3, $4)
+`
+
+type CreatePostParams struct {
+	Nama      string
+	Deskripsi string
+	KodeKelas string
+	Tipe      TipeMateri
+}
+
+func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
+	_, err := q.db.Exec(ctx, createPost,
+		arg.Nama,
+		arg.Deskripsi,
+		arg.KodeKelas,
+		arg.Tipe,
+	)
+	return err
+}
+
+const getKelas = `-- name: GetKelas :one
+select k.id, k.nama as nama_kelas, subjek, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
+join pengguna p on p.id = k.pengajar where kode = $1
+`
+
+type GetKelasRow struct {
+	ID           int32
+	NamaKelas    string
+	Subjek       string
+	NamaPengajar string
+	Kode         string
+	Dibuat       pgtype.Timestamp
+}
+
+func (q *Queries) GetKelas(ctx context.Context, kode string) (GetKelasRow, error) {
+	row := q.db.QueryRow(ctx, getKelas, kode)
+	var i GetKelasRow
+	err := row.Scan(
+		&i.ID,
+		&i.NamaKelas,
+		&i.Subjek,
+		&i.NamaPengajar,
+		&i.Kode,
+		&i.Dibuat,
+	)
+	return i, err
+}
+
 const getPengguna = `-- name: GetPengguna :one
 select id, nama, email, telepon, password, dibuat from pengguna where id = $1
 `
@@ -67,22 +139,35 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
 }
 
 const listKelas = `-- name: ListKelas :many
-select id, nama, pengajar, kode, dibuat from kelas
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
+UNION
+SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
+WHERE murid.id_pengguna = $1
 `
 
-func (q *Queries) ListKelas(ctx context.Context) ([]Kela, error) {
-	rows, err := q.db.Query(ctx, listKelas)
+type ListKelasRow struct {
+	ID           int32
+	NamaKelas    string
+	Subjek       string
+	NamaPengguna string
+	Kode         string
+	Dibuat       pgtype.Timestamp
+}
+
+func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]ListKelasRow, error) {
+	rows, err := q.db.Query(ctx, listKelas, pengajar)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Kela
+	var items []ListKelasRow
 	for rows.Next() {
-		var i Kela
+		var i ListKelasRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.Nama,
-			&i.Pengajar,
+			&i.NamaKelas,
+			&i.Subjek,
+			&i.NamaPengguna,
 			&i.Kode,
 			&i.Dibuat,
 		); err != nil {
@@ -97,11 +182,11 @@ func (q *Queries) ListKelas(ctx context.Context) ([]Kela, error) {
 }
 
 const listMurid = `-- name: ListMurid :many
-select id, id_pengguna, id_kelas, bergabung from murid where id_kelas = $1
+select id, id_pengguna, kode_kelas, bergabung from murid where kode_kelas = $1
 `
 
-func (q *Queries) ListMurid(ctx context.Context, idKelas int32) ([]Murid, error) {
-	rows, err := q.db.Query(ctx, listMurid, idKelas)
+func (q *Queries) ListMurid(ctx context.Context, kodeKelas string) ([]Murid, error) {
+	rows, err := q.db.Query(ctx, listMurid, kodeKelas)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +197,7 @@ func (q *Queries) ListMurid(ctx context.Context, idKelas int32) ([]Murid, error)
 		if err := rows.Scan(
 			&i.ID,
 			&i.IDPengguna,
-			&i.IDKelas,
+			&i.KodeKelas,
 			&i.Bergabung,
 		); err != nil {
 			return nil, err
@@ -157,11 +242,11 @@ func (q *Queries) ListPengguna(ctx context.Context) ([]Pengguna, error) {
 }
 
 const listPost = `-- name: ListPost :many
-select id, nama, deskripsi, id_kelas, tipe from post where id_kelas = $1
+select id, nama, deskripsi, kode_kelas, tipe from post where kode_kelas = $1
 `
 
-func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
-	rows, err := q.db.Query(ctx, listPost, idKelas)
+func (q *Queries) ListPost(ctx context.Context, kodeKelas string) ([]Post, error) {
+	rows, err := q.db.Query(ctx, listPost, kodeKelas)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +258,7 @@ func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
 			&i.ID,
 			&i.Nama,
 			&i.Deskripsi,
-			&i.IDKelas,
+			&i.KodeKelas,
 			&i.Tipe,
 		); err != nil {
 			return nil, err
@@ -184,4 +269,14 @@ func (q *Queries) ListPost(ctx context.Context, idKelas int32) ([]Post, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const validatePenggunaID = `-- name: ValidatePenggunaID :one
+select id from pengguna where id = $1
+`
+
+func (q *Queries) ValidatePenggunaID(ctx context.Context, id int32) (int32, error) {
+	row := q.db.QueryRow(ctx, validatePenggunaID, id)
+	err := row.Scan(&id)
+	return id, err
 }

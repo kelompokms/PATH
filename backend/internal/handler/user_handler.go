@@ -99,8 +99,10 @@ func (app *App) getUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "gagal menampilkan hasil", http.StatusInternalServerError)
 		return
 	}
+
+	w.Header().Set("content-type", "application/json")
 	w.Write(jsonString)
 }
 
-func (app *App) putUser(w http.ResponseWriter, r *http.Request) {
+func (app *App) patchUser(w http.ResponseWriter, r *http.Request) {
 }

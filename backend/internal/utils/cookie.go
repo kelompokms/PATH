@@ -16,3 +16,15 @@ func SetCookie(w http.ResponseWriter, tokenString string) {
 		SameSite: http.SameSiteLaxMode,
 	})
 }
+
+func ClearCookie(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now(),
+		HttpOnly: true,
+		Secure:   false,
+		Path:     "/",
+		SameSite: http.SameSiteLaxMode,
+	})
+}
