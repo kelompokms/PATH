@@ -20,8 +20,6 @@ services:
       - path_network
     ports:
       - 5433:5432
-    volumes:
-      - db_data:/var/lib/postgresql
 
 networks:
   path_network:
