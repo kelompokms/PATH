@@ -1,0 +1,28 @@
+services:
+  api:
+    build: backend
+    entrypoint: /app/path_api
+    networks:
+      - path_network
+    environment:
+      DATABASE_URL: "postgresql://wave:123123@path-db-1/path?sslmode=disable"
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: path
+    networks:
+      - path_network
+    ports:
+      - 5433:5432
+    volumes:
+      - db_data:/var/lib/postgresql
+
+networks:
+  path_network:
+    driver: bridge

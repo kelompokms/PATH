@@ -1,10 +1,11 @@
 module path_project
 
-go 1.26.1
+go 1.25.0
 
 require (
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/go-chi/chi/v5 v5.2.5 // indirect
+	github.com/go-chi/cors v1.2.2 // indirect
 	github.com/go-chi/jwtauth/v5 v5.4.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
