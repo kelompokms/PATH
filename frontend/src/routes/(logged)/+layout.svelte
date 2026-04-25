@@ -1,5 +1,4 @@
 <script lang="ts">
-  import './app.css';
   import { page } from '$app/stores'; // Untuk cek URL aktif
   import { ui } from '$lib/ui.svelte'; // Jika kamu sudah buat state global kemarin
   
