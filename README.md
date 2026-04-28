@@ -13,7 +13,7 @@ Personal Adaptive Teaching Hub (PATH)
 ```bash
 docker compose up -d --build
 docker exec -it path-api-1 sh
-goose run ./internal/db/migrations postgres $DATABASE_URL up
+goose -dir ./internal/db/migrations postgres $DATABASE_URL up
 ```
 
 ### Kebutuhan Development
