@@ -5,7 +5,7 @@ services:
     networks:
       - path_network
     environment:
-      DATABASE_URL: "postgresql://wave:123123@localhost:5433/path?sslmode=disable"
+      DATABASE_URL: "postgresql://wave:123123@path-db-1:5432/path?sslmode=disable"
       SECRET: "mypath"
     ports:
       - 3000:3000
@@ -30,8 +30,6 @@ services:
       - path_network
     ports:
       - 3001:3000
-    depends_on:
-      - api
 
 networks:
   path_network:
