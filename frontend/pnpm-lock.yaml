@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      daisyui:
-        specifier: ^5.5.19
-        version: 5.5.19
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
     devDependencies:
       '@sveltejs/adapter-node':
         specifier: ^5.5.4
@@ -22,7 +22,7 @@ importers:
         specifier: ^7.0.0
         version: 7.0.0(svelte@5.55.5)(vite@8.0.10(jiti@2.6.1))
       '@tailwindcss/vite':
-        specifier: ^4.2.2
+        specifier: ^4.2.4
         version: 4.2.4(vite@8.0.10(jiti@2.6.1))
       prettier:
         specifier: ^3.8.1
@@ -37,7 +37,7 @@ importers:
         specifier: ^5.55.2
         version: 5.55.5
       tailwindcss:
-        specifier: ^4.2.2
+        specifier: ^4.2.4
         version: 4.2.4
       vite:
         specifier: ^8.0.7
@@ -523,8 +523,8 @@ packages:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
 
-  daisyui@5.5.19:
-    resolution: {integrity: sha512-pbFAkl1VCEh/MPCeclKL61I/MqRIFFhNU7yiXoDDRapXN4/qNCoMxeCCswyxEEhqL5eiTTfwHvucFtOE71C9sA==}
+  date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
 
   deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
@@ -1226,7 +1226,7 @@ snapshots:
 
   cookie@0.6.0: {}
 
-  daisyui@5.5.19: {}
+  date-fns@4.1.0: {}
 
   deepmerge@4.3.1: {}
 
