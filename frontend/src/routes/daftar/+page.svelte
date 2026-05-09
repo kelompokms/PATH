@@ -1,10 +1,16 @@
+<script>
+    function register(event) {
+        event.preventDefault();
+    }
+</script>
+
 <main class="bg-purple-100 flex flex-col justify-center items-center size-full">
     <div class="w-full">
         <div
             class="bg-white m-6 p-4 shadow-lg rounded-lg flex flex-col gap-4 text-center"
         >
             <h2 class="text-2xl font-bold">Daftar</h2>
-            <form class="flex flex-col gap-6">
+            <form class="flex flex-col gap-6" onsubmit={register}>
                 <input placeholder="Nama panjang" type="text" name="Nama" />
                 <input placeholder="Email" type="email" name="email" />
                 <input placeholder="Password" type="password" name="password" />
@@ -14,7 +20,10 @@
                         >Accept term & Condition</label
                     >
                 </div>
-                <button class="btn btn-blue" type="submit">Daftar</button>
+                <button
+                    class="btn btn-primary btn-outline rounded-lg"
+                    type="submit">Daftar</button
+                >
             </form>
             <p class="text-sm">
                 Sudah punya akun?
