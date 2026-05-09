@@ -22,7 +22,7 @@
     }
 
     .menu svg {
-        @apply size-7 inline-block my-1 active:text-white active:bg-white
+        @apply size-7 inline-block my-1
     }
 
     input {
