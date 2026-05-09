@@ -20,7 +20,7 @@
             <label
                 for="drawer-toggle"
                 aria-label="open sidebar"
-                class="btn btn-square btn-ghost"
+                class="btn btn-square btn-secondary btn-ghost"
             >
                 <Bars />
             </label>

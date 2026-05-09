@@ -7,7 +7,7 @@
 </script>
 
 <main class="bg-purple-100 flex flex-col justify-center items-center size-full">
-    <div class="w-full">
+    <div class="w-full max-w-md">
         <div
             class="bg-white m-6 p-4 shadow-lg rounded-lg flex flex-col gap-4 text-center"
         >

@@ -4,6 +4,15 @@
     themes: light --default
 };
 
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    --color-primary: var(--color-blue-100);
+    --color-primary-content: var(--color-blue-900);
+    --color-secondary: var(--color-purple-200);
+    --color-secondary-content: var(--color-black);
+}
+
 @layer base {
     html,
     body,
