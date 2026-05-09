@@ -12,6 +12,10 @@
         @apply h-full w-full;
     }
 
+    .menu svg {
+        @apply size-7 inline-block my-1 active:text-white active:bg-white
+    }
+
     input {
         @apply border border-gray-400 rounded-lg p-2 shadow-md;
     }
