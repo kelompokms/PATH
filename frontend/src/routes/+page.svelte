@@ -1,14 +1,14 @@
-<script>
-	import { get } from '$lib/utilitas/api';
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		fetch('auth').then((res) => {
-			if (!res.ok) {
-				window.location.href = '/login';
-				return;
-			}
-			window.location.href = '/dashboard';
-		});
-	});
-</script>
+<div class="h-screen flex justify-center items-center text-lg">
+    <nav
+        class="flex flex-col text-center *:border *:w-full *:p-2 *:rounded-md gap-2"
+    >
+        <a href="/daftar">Daftar</a>
+        <a href="/login">login</a>
+        <a href="/bantuan">bantuan</a>
+        <a href="/beranda">beranda</a>
+        <a href="/kelas">kelas</a>
+        <a href="/kalender">kalender</a>
+        <a href="/pengajar">pengajar</a>
+        <a href="/profil">profil</a>
+    </nav>
+</div>
