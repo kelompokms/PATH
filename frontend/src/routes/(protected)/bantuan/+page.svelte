@@ -18,10 +18,8 @@
 </script>
 
 <main class="p-4">
-    <div class="bg-white shadow-lg rounded-lg">
-        <h2 class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-md">
-            Bantuan
-        </h2>
+    <div class="bg-white shadow-lg">
+        <h2 class="bg-purple-200 p-4 text-2xl font-semibold">Bantuan</h2>
         <div class="join join-vertical w-full">
             {#each BANTUAN as item}
                 <div
