@@ -46,13 +46,17 @@
         >
             <ul class="menu w-full grow">
                 <!-- List item -->
-                <DrawerItem icon={House} name="Beranda" />
-                <DrawerItem icon={Chalkboard} name="Kelas" />
-                <DrawerItem icon={ChalkboardUser} name="Pengajar" />
-                <DrawerItem icon={Calendar} name="Kalender" />
-                <DrawerItem icon={Gear} name="Pengaturan" />
-                <DrawerItem icon={Question} name="Bantuan" />
-                <DrawerItem icon={CircleUser} name="Profil" />
+                <DrawerItem href="/beranda" icon={House} name="Beranda" />
+                <DrawerItem href="/kelas" icon={Chalkboard} name="Kelas" />
+                <DrawerItem
+                    href="/pengajar"
+                    icon={ChalkboardUser}
+                    name="Pengajar"
+                />
+                <DrawerItem href="/kalender" icon={Calendar} name="Kalender" />
+                <DrawerItem href="/pengaturan" icon={Gear} name="Pengaturan" />
+                <DrawerItem href="/bantuan" icon={Question} name="Bantuan" />
+                <DrawerItem href="/profil" icon={CircleUser} name="Profil" />
             </ul>
         </div>
     </div>
