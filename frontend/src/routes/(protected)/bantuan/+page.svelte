@@ -17,7 +17,7 @@
     ];
 </script>
 
-<main class="p-4">
+<main class="p-0 md:p-4">
     <div class="bg-white shadow-lg">
         <h2 class="bg-purple-200 p-4 text-2xl font-semibold">Bantuan</h2>
         <div class="join join-vertical w-full">

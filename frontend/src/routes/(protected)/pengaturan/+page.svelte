@@ -1,4 +1,4 @@
-<main class="p-4">
+<main class="p-0 md:p-4">
     <div class="shadow-md bg-white">
         <h2 class="bg-purple-200 font-semibold text-2xl p-4">Pengaturan</h2>
         <div class="*:p-4 font-semibold">

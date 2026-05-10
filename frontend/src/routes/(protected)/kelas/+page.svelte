@@ -36,18 +36,19 @@
     ];
 </script>
 
-<main class="flex flex-wrap gap-8 p-4">
+<main class="flex flex-wrap gap-8 p-0 md:p-4">
     {#each kelas as i}
-        <button
+        <a
+            href={"/kelas/" + i.ID}
             class="card w-100 h-fit text-left shadow-sm transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
         >
             <figure>
                 <img src={Wolf} alt="" class="aspect-video" />
             </figure>
-            <div class="card-body">
+            <div class="card-body p-4">
                 <h2 class="card-title">{i.NamaKelas}</h2>
                 <p>{i.NamaPengguna}</p>
             </div>
-        </button>
+        </a>
     {/each}
 </main>

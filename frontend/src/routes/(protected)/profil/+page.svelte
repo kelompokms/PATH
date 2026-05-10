@@ -2,7 +2,7 @@
     import CircleUser from "$lib/svg/circle-user.svelte";
 </script>
 
-<main class="p-4">
+<main class="p-0 md:p-4">
     <div class="bg-white shadow-md">
         <h2 class="text-2xl font-semibold p-4 bg-purple-200">Profil</h2>
         <div class="*:flex *:justify-between *:items-center *:p-4">
