@@ -39,7 +39,7 @@
 <main class="flex flex-wrap gap-8 p-0 md:p-4">
     {#each kelas as i}
         <a
-            href={"/kelas/" + i.ID}
+            href={"/kelas/" + i.ID + "/forum"}
             class="card w-100 h-fit text-left shadow-sm transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
         >
             <figure>

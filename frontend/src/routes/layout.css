@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-    themes: light --default
-};
+    themes: light --default;
+}
 
 @plugin "daisyui/theme" {
     name: "light";
@@ -22,7 +22,7 @@
     }
 
     .menu svg {
-        @apply size-7 inline-block my-1
+        @apply size-7 inline-block my-1;
     }
 
     input {
