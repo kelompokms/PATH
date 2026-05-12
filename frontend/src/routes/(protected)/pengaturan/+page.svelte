@@ -1,14 +1,22 @@
 <main class="p-0 md:p-4">
-    <div class="shadow-md bg-white">
-        <h2 class="bg-purple-200 font-semibold text-2xl p-4">Pengaturan</h2>
-        <div class="*:p-4 font-semibold">
-            <div class="flex *:first:grow">
-                <label for="notif">Notifikasi</label>
-                <input id="notif" type="checkbox" />
+    <div class="bg-white">
+        <h2
+            class="bg-purple-200 font-semibold text-2xl p-4 rounded-t-lg border-2 border-purple-900/10"
+        >
+            Pengaturan
+        </h2>
+        <div class="flex flex-col">
+            <div
+                class="border-2 border-t-0 border-black/10 p-4 font-semibold flex justify-between"
+            >
+                <p>Notifikasi</p>
+                <input class="p-2 scale-150" type="checkbox" />
             </div>
-            <div class="flex *:first:grow">
-                <label for="notif">Tema</label>
-                <input id="notif" type="checkbox" />
+            <div
+                class="border-2 border-t-0 border-black/10 p-4 font-semibold flex justify-between rounded-b-lg"
+            >
+                <p>Tema</p>
+                <input class="p-2 scale-150" type="checkbox" />
             </div>
         </div>
     </div>

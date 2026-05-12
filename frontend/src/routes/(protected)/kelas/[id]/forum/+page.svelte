@@ -29,9 +29,15 @@
 
 <div class="flex flex-col gap-4 p-2">
     {#each kelasItems as item}
-        <div class="border p-2">
-            <p class="font-semibold text-xl">{item.nama}</p>
-            <p>{item.deskripsi}</p>
+        <div>
+            <p
+                class="p-4 rounded-t-lg border-2 border-purple-900/15 border-b-0 font-semibold text-2xl bg-purple-200"
+            >
+                {item.nama}
+            </p>
+            <p class="p-4 border-2 border-t-0 border-black/10 rounded-b-lg">
+                {item.deskripsi}
+            </p>
         </div>
     {/each}
 </div>
