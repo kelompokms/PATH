@@ -14,12 +14,13 @@
             <p>Gabung Kelas atau Buat Kelas</p>
         </div>
         <div class="flex gap-2">
-            <button class="grow p-2 rounded-xl btn btn-primary"
-                >Gabung Kelas</button
+            <a href="/kelas/gabung" class="grow p-2 rounded-xl btn btn-primary"
+                >Gabung Kelas</a
             >
-            <button
+            <a
+                href="/kelas/buat"
                 class="grow p-2 rounded-xl btn btn-primary btn-ghost text-blue-900 border-2 border-blue-100"
-                >Buat Kelas</button
+                >Buat Kelas</a
             >
         </div>
     </div>
