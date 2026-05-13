@@ -17,7 +17,7 @@
     });
 </script>
 
-<main>
+<main class="flex flex-col">
     <div role="tablist" class="tabs tabs-border p-2">
         {#each navItems as item}
             <a
