@@ -1,1 +1,37 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+    name: "light";
+    default: true;
+    --color-primary: var(--color-blue-100);
+    --color-primary-content: var(--color-blue-900);
+    --color-secondary: var(--color-purple-200);
+    --color-secondary-content: var(--color-black);
+}
+
+@layer base {
+    html,
+    body,
+    main,
+    .size-full {
+        @apply h-full w-full;
+    }
+
+    .menu svg {
+        @apply size-7 inline-block my-1;
+    }
+
+    input {
+        @apply border border-gray-400 rounded-lg p-2 shadow-md;
+    }
+}
+
+@layer components {
+    .btn-blue {
+        @apply bg-blue-100 border-blue-200 hover:bg-blue-200 active:bg-blue-200 md:active:bg-blue-300;
+    }
+}
