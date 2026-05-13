@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export GOOSE_DRIVER=""
+export GOOSE_MIGRATION_DIR=""
+export GOOSE_DBSTRING=""

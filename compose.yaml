@@ -23,7 +23,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - path_db:/var/lib/postgresql/data
     restart: unless-stopped
   frontend:
     entrypoint: node /app/build/index.js
@@ -38,4 +38,4 @@ networks:
     driver: bridge
 
 volumes:
-  pg_data:
+  path_db:

@@ -1,10 +1,12 @@
 -- +goose Up
 CREATE TYPE tipe_materi AS ENUM ('kuis', 'materi', 'tugas');
+CREATE TYPE tipe_kelamin AS ENUM ('l', 'p');
 
 CREATE TABLE pengguna (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(128) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
+    jenis_kelamin tipe_kelamin NOT NULL,
     telepon VARCHAR(32) NOT NULL,
     password VARCHAR(255) NOT NULL,
     dibuat TIMESTAMP DEFAULT NOW()
