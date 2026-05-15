@@ -42,7 +42,7 @@ func (app *App) login(w http.ResponseWriter, r *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(res.Password), []byte(password))
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "email atau password salah!", http.StatusBadRequest)
+		http.Error(w, "gagal membuat kredensial", http.StatusBadRequest)
 		return
 	}
 

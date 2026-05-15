@@ -1,9 +1,17 @@
 <script>
     import Wolf from "$lib/assets/wolf.webp";
-    function login(event) {
+    import { post } from "$lib/utils/api";
+
+    async function login(event) {
         event.preventDefault();
 
-        window.location.href = "/beranda";
+        let formData = new FormData(event.target);
+        const res = await post("login", formData);
+
+        if (res.ok) {
+            window.location.href = "/beranda";
+            return;
+        }
     }
 </script>
 

@@ -17,6 +17,7 @@ func (app *App) registerRoutes() {
 		rp.Use(jwtauth.Verifier(app.tokenAuth))
 		rp.Use(jwtauth.Authenticator(app.tokenAuth))
 
+		rp.Get("/auth", func(w http.ResponseWriter, r *http.Request) {})
 		rp.Get("/user", app.getUser)
 		rp.Patch("/user", app.patchUser)
 		rp.Get("/class", app.getClasses)

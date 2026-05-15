@@ -42,3 +42,4 @@ DROP TABLE post;
 DROP TABLE kelas;
 DROP TABLE pengguna;
 DROP TYPE tipe_materi;
+DROP TYPE tipe_kelamin;

@@ -49,14 +49,15 @@ func (q *Queries) CreateKelas(ctx context.Context, arg CreateKelasParams) error 
 }
 
 const createPengguna = `-- name: CreatePengguna :one
-insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4) returning id
+insert into pengguna(nama, email, telepon, password, jenis_kelamin) values ($1, $2, $3, $4, $5) returning id
 `
 
 type CreatePenggunaParams struct {
-	Nama     string
-	Email    string
-	Telepon  string
-	Password string
+	Nama         string
+	Email        string
+	Telepon      string
+	Password     string
+	JenisKelamin TipeKelamin
 }
 
 func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) (int32, error) {
@@ -65,6 +66,7 @@ func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) 
 		arg.Email,
 		arg.Telepon,
 		arg.Password,
+		arg.JenisKelamin,
 	)
 	var id int32
 	err := row.Scan(&id)

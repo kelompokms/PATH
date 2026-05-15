@@ -25,15 +25,23 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	telepon := r.FormValue("telepon")
 	password := r.FormValue("password")
+	kelamin := r.FormValue("jenis_kelamin")
 
 	// validasi standar input
-	if nama == "" || email == "" || telepon == "" || password == "" {
+	if nama == "" || email == "" || telepon == "" || password == "" || kelamin == "" {
 		http.Error(w, "Input tidak lengkap!", http.StatusBadRequest)
 		return
 	}
 
-	if len(nama) >= 128 || len(email) >= 255 || len(telepon) >= 32 || len(password) >= 255 {
+	// validasi ukuran
+	if len(nama) >= 128 || len(email) >= 255 || len(telepon) >= 32 || len(password) >= 255 || len(kelamin) >= 2 {
 		http.Error(w, "Input tidak valid!", http.StatusBadRequest)
+		return
+	}
+
+	// validasi kelamin
+	if kelamin != "p" && kelamin != "l" {
+		http.Error(w, "Kelamin tidak valid!", http.StatusBadRequest)
 		return
 	}
 
@@ -58,10 +66,11 @@ func (app *App) register(w http.ResponseWriter, r *http.Request) {
 
 	// insert ke database
 	userId, err := app.db.CreatePengguna(r.Context(), db.CreatePenggunaParams{
-		Nama:     nama,
-		Email:    email,
-		Telepon:  telepon,
-		Password: hashed_password,
+		Nama:         nama,
+		Email:        email,
+		Telepon:      telepon,
+		Password:     hashed_password,
+		JenisKelamin: db.TipeKelamin(kelamin),
 	})
 
 	if err != nil {
