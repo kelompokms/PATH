@@ -4,14 +4,21 @@
     import { get } from "$lib/utils/api";
     import { onMount } from "svelte";
 
-    let kelas = $state([]);
+    let kelas = $state();
 
     onMount(async () => {
         kelas = await get("class");
     });
 </script>
 
-{#if kelas.length <= 0}
+{#if typeof kelas == "undefined"}
+    <main class="flex flex-wrap gap-6 justify-center h-fit">
+        <div class="skeleton w-full max-w-sm aspect-video h-fit"></div>
+        <div class="skeleton w-full max-w-sm aspect-video h-fit"></div>
+        <div class="skeleton w-full max-w-sm aspect-video h-fit"></div>
+        <div class="skeleton w-full max-w-sm aspect-video h-fit"></div>
+    </main>
+{:else if typeof kelas == "object" && kelas.length <= 0}
     <main class="flex flex-col justify-center items-center">
         <div class="flex flex-col max-w-sm gap-4">
             <div

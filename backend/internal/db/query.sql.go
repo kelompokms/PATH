@@ -28,20 +28,22 @@ func (q *Queries) CheckPengguna(ctx context.Context, email string) (CheckPenggun
 }
 
 const createKelas = `-- name: CreateKelas :exec
-insert into kelas (nama, subjek, pengajar, kode) values ($1, $2, $3, $4)
+insert into kelas (nama, bagian, deskripsi, pengajar, kode) values ($1, $2, $3, $4, $5)
 `
 
 type CreateKelasParams struct {
-	Nama     string
-	Subjek   string
-	Pengajar int32
-	Kode     string
+	Nama      string
+	Bagian    pgtype.Text
+	Deskripsi pgtype.Text
+	Pengajar  int32
+	Kode      string
 }
 
 func (q *Queries) CreateKelas(ctx context.Context, arg CreateKelasParams) error {
 	_, err := q.db.Exec(ctx, createKelas,
 		arg.Nama,
-		arg.Subjek,
+		arg.Bagian,
+		arg.Deskripsi,
 		arg.Pengajar,
 		arg.Kode,
 	)
@@ -95,14 +97,15 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
 }
 
 const getKelas = `-- name: GetKelas :one
-select k.id, k.nama as nama_kelas, subjek, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
+select k.id, k.nama as nama_kelas, bagian, deskripsi, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
 join pengguna p on p.id = k.pengajar where kode = $1
 `
 
 type GetKelasRow struct {
 	ID           int32
 	NamaKelas    string
-	Subjek       string
+	Bagian       pgtype.Text
+	Deskripsi    pgtype.Text
 	NamaPengajar string
 	Kode         string
 	Dibuat       pgtype.Timestamp
@@ -114,7 +117,8 @@ func (q *Queries) GetKelas(ctx context.Context, kode string) (GetKelasRow, error
 	err := row.Scan(
 		&i.ID,
 		&i.NamaKelas,
-		&i.Subjek,
+		&i.Bagian,
+		&i.Deskripsi,
 		&i.NamaPengajar,
 		&i.Kode,
 		&i.Dibuat,
@@ -148,16 +152,17 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (GetPenggunaRow, er
 }
 
 const listKelas = `-- name: ListKelas :many
-SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
+SELECT kelas.id, kelas.nama as nama_kelas, bagian, deskripsi, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
 UNION
-SELECT kelas.id, kelas.nama as nama_kelas, subjek, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
+SELECT kelas.id, kelas.nama as nama_kelas, bagian, deskripsi, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
 WHERE murid.id_pengguna = $1
 `
 
 type ListKelasRow struct {
 	ID           int32
 	NamaKelas    string
-	Subjek       string
+	Bagian       pgtype.Text
+	Deskripsi    pgtype.Text
 	NamaPengguna string
 	Kode         string
 	Dibuat       pgtype.Timestamp
@@ -175,7 +180,8 @@ func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]ListKelasRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.NamaKelas,
-			&i.Subjek,
+			&i.Bagian,
+			&i.Deskripsi,
 			&i.NamaPengguna,
 			&i.Kode,
 			&i.Dibuat,

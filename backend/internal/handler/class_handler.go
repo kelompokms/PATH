@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (app *App) getClasses(w http.ResponseWriter, r *http.Request) {
@@ -65,19 +66,20 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	log.Println("user ID:", userID)
 
 	nama := r.FormValue("nama")
-	subjek := r.FormValue("subjek")
+	bagian := r.FormValue("bagian")
+	deskripsi := r.FormValue("deskripsi")
 
-	if nama == "" || subjek == "" {
+	if nama == "" {
 		http.Error(w, "input tidak lengkap!", http.StatusBadRequest)
 		return
 	}
 
-	if len(nama) > 64 || len(subjek) > 64 {
-		http.Error(w, "nama kelas atau subjek terlalu panjang!", http.StatusBadRequest)
+	if len(nama) > 64 || len(bagian) > 320 {
+		http.Error(w, "nama kelas atau bagian terlalu panjang!", http.StatusBadRequest)
 		return
 	}
 
-	if len(nama) < 3 || len(subjek) < 3 {
+	if len(nama) < 3 {
 		http.Error(w, "nama kelas atau subjek terlalu pendek!", http.StatusBadRequest)
 		return
 	}
@@ -89,10 +91,11 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = app.db.CreateKelas(r.Context(), db.CreateKelasParams{
-		Nama:     nama,
-		Subjek:   subjek,
-		Pengajar: validUserID,
-		Kode:     utils.NewHashCode(),
+		Nama:      nama,
+		Bagian:    pgtype.Text{String: bagian, Valid: true},
+		Deskripsi: pgtype.Text{String: deskripsi, Valid: true},
+		Pengajar:  validUserID,
+		Kode:      utils.NewHashCode(),
 	})
 
 	if err != nil {
