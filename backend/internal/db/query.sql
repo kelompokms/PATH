@@ -33,4 +33,4 @@ select id from pengguna where id = $1;
 select id, password from pengguna where email = $1;
 
 -- name: CreatePengguna :one
-insert into pengguna(nama, email, telepon, password) values ($1, $2, $3, $4) returning id;
+insert into pengguna(nama, email, telepon, password, jenis_kelamin) values ($1, $2, $3, $4, $5) returning id;
