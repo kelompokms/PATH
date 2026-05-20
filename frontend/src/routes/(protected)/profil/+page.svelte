@@ -1,5 +1,15 @@
 <script>
     import CircleUser from "$lib/svg/circle-user.svelte";
+    import { get } from "$lib/utils/api";
+    import { onMount } from "svelte";
+
+    let user = $state({});
+
+    onMount(async () => {
+        const res = await get("user");
+        console.log(res);
+        user = res;
+    });
 </script>
 
 <main class="p-0 md:p-4">
@@ -24,21 +34,21 @@
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Display Name</h3>
-                    <p>Siswa 1</p>
+                    <p>{user.Nama}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Email</h3>
-                    <p>siswa@mail.com</p>
+                    <p>{user.Email}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Phone</h3>
-                    <p>085123123</p>
+                    <p>{user.Telepon}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
@@ -46,6 +56,16 @@
                 <div>
                     <h3 class="font-semibold text-lg">Password</h3>
                     <p>********</p>
+                </div>
+                <button class="btn btn-ghost">Edit</button>
+            </div>
+
+            <div>
+                <div>
+                    <h3 class="font-semibold text-lg">Jenis Kelamin</h3>
+                    <p>
+                        {user.JenisKelamin == "l" ? "Laki-laki" : "Perempuan"}
+                    </p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>

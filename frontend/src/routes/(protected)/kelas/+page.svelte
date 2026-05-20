@@ -1,54 +1,47 @@
 <script>
+    import { goto } from "$app/navigation";
     import Wolf from "$lib/assets/wolf.webp";
-    let kelas = [
-        {
-            ID: 1,
-            NamaKelas: "Mapel 1",
-            Subjek: "Jaringan Nirkabel",
-            NamaPengguna: "Vereh",
-            Kode: "6969",
-            Dibuat: "2026-03-03",
-        },
-        {
-            ID: 2,
-            NamaKelas: "Mapel 2",
-            Subjek: "Jaringan Nirkabel",
-            NamaPengguna: "Vereh",
-            Kode: "6969",
-            Dibuat: "2026-03-03",
-        },
-        {
-            ID: 3,
-            NamaKelas: "Mapel 3",
-            Subjek: "Jaringan Nirkabel",
-            NamaPengguna: "Vereh",
-            Kode: "6969",
-            Dibuat: "2026-03-03",
-        },
-        {
-            ID: 4,
-            NamaKelas: "Mapel 4",
-            Subjek: "Jaringan Nirkabel",
-            NamaPengguna: "Vereh",
-            Kode: "6969",
-            Dibuat: "2026-03-03",
-        },
-    ];
+    import { get } from "$lib/utils/api";
+    import { onMount } from "svelte";
+
+    let kelas = $state([]);
+
+    onMount(async () => {
+        kelas = await get("class");
+    });
 </script>
 
-<main class="flex flex-wrap gap-8 p-0 md:p-4">
-    {#each kelas as i}
-        <a
-            href={"/kelas/" + i.ID + "/forum"}
-            class="card w-100 h-fit text-left shadow-sm transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
-        >
-            <figure>
-                <img src={Wolf} alt="" class="aspect-video" />
-            </figure>
-            <div class="card-body p-4">
-                <h2 class="card-title">{i.NamaKelas}</h2>
-                <p>{i.NamaPengguna}</p>
+{#if kelas.length <= 0}
+    <main class="flex flex-col justify-center items-center">
+        <div class="flex flex-col max-w-sm gap-4">
+            <div
+                class="flex flex-col p-10 gap-6 bg-white rounded-lg shadow-lg w-full text-center"
+            >
+                <img src={Wolf} class="rounded-full aspect-square" alt="" />
+                <h3 class="font-semibold text-xl text-sky-900">
+                    Tidak ada Kelas
+                </h3>
             </div>
-        </a>
-    {/each}
-</main>
+            <button onclick={() => goto("/kelas/buat")} class="btn btn-primary"
+                >Buat</button
+            >
+        </div>
+    </main>
+{:else}
+    <main class="flex flex-wrap gap-8 p-0 md:p-4">
+        {#each kelas as i}
+            <a
+                href={"/kelas/" + i.ID + "/forum"}
+                class="card w-100 h-fit text-left shadow-sm transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
+            >
+                <figure>
+                    <img src={Wolf} alt="" class="aspect-video" />
+                </figure>
+                <div class="card-body p-4">
+                    <h2 class="card-title">{i.NamaKelas}</h2>
+                    <p>{i.NamaPengguna}</p>
+                </div>
+            </a>
+        {/each}
+    </main>
+{/if}

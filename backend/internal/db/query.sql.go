@@ -123,20 +123,26 @@ func (q *Queries) GetKelas(ctx context.Context, kode string) (GetKelasRow, error
 }
 
 const getPengguna = `-- name: GetPengguna :one
-select id, nama, email, jenis_kelamin, telepon, password, dibuat from pengguna where id = $1
+select id, nama, email, jenis_kelamin, telepon from pengguna where id = $1
 `
 
-func (q *Queries) GetPengguna(ctx context.Context, id int32) (Pengguna, error) {
+type GetPenggunaRow struct {
+	ID           int32
+	Nama         string
+	Email        string
+	JenisKelamin TipeKelamin
+	Telepon      string
+}
+
+func (q *Queries) GetPengguna(ctx context.Context, id int32) (GetPenggunaRow, error) {
 	row := q.db.QueryRow(ctx, getPengguna, id)
-	var i Pengguna
+	var i GetPenggunaRow
 	err := row.Scan(
 		&i.ID,
 		&i.Nama,
 		&i.Email,
 		&i.JenisKelamin,
 		&i.Telepon,
-		&i.Password,
-		&i.Dibuat,
 	)
 	return i, err
 }

@@ -24,7 +24,7 @@ insert into post (nama, deskripsi, kode_kelas, tipe) values ($1, $2, $3, $4);
 select * from pengguna;
 
 -- name: GetPengguna :one
-select * from pengguna where id = $1;
+select id, nama, email, jenis_kelamin, telepon from pengguna where id = $1;
 
 -- name: ValidatePenggunaID :one
 select id from pengguna where id = $1;
