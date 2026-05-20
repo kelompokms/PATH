@@ -1,4 +1,5 @@
 <script>
+    import { goto } from "$app/navigation";
     import Wolf from "$lib/assets/wolf.webp";
     import { post } from "$lib/utils/api";
 
@@ -11,7 +12,7 @@
         const res = await post("register", formData);
 
         if (res.ok) {
-            window.location.href = "/beranda";
+            goto("/beranda");
             return;
         }
 
