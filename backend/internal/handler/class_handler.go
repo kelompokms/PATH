@@ -90,19 +90,34 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	kode := utils.NewHashCode()
+	res, err := app.db.GetKelasCode(r.Context(), kode)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	// TODO: will refactor
+	for len(res) >= 1 {
+		kode = utils.NewHashCode()
+		res, err = app.db.GetKelasCode(r.Context(), kode)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+
 	err = app.db.CreateKelas(r.Context(), db.CreateKelasParams{
 		Nama:      nama,
 		Bagian:    pgtype.Text{String: bagian, Valid: true},
 		Deskripsi: pgtype.Text{String: deskripsi, Valid: true},
 		Pengajar:  validUserID,
-		Kode:      utils.NewHashCode(),
+		Kode:      kode,
 	})
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "gagal membuat kelas: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// if err != nil {
+	// 	log.Println(err)
+	// 	http.Error(w, "gagal membuat kelas: "+err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 
 	w.Write([]byte("berhasil membuat kelas!"))
 }

@@ -1,6 +1,7 @@
 <script>
+    import { goto } from "$app/navigation";
     import CircleUser from "$lib/svg/circle-user.svelte";
-    import { get } from "$lib/utils/api";
+    import { get, post } from "$lib/utils/api";
     import { onMount } from "svelte";
 
     let user = $state({});
@@ -10,6 +11,17 @@
         console.log(res);
         user = res;
     });
+
+    async function logout() {
+        const res = await post("logout", {});
+        if (res.ok) {
+            goto("/login");
+            return;
+        }
+
+        const text = res.text();
+        alert("Gagal Logout:", text);
+    }
 </script>
 
 <main class="p-0 md:p-4">
@@ -71,4 +83,7 @@
             </div>
         </div>
     </div>
+    <button onclick={logout} class="mt-4 btn btn-error btn-outline ml-auto"
+        >Logout</button
+    >
 </main>

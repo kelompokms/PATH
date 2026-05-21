@@ -5,8 +5,10 @@
 
     onMount(async () => {
         const res = await checkAuth();
+        console.log(res);
         if (res.ok) {
             goto("/beranda");
+            return;
         }
 
         goto("/login");

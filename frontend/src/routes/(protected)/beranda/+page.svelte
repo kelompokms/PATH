@@ -20,8 +20,8 @@
         </div>
         <div class="flex gap-2">
             <button
-                onclick={() => goto("/kelas")}
-                class="grow p-2 rounded-xl btn btn-primary">Lihat Kelas</button
+                onclick={() => goto("/kelas/gabung")}
+                class="grow p-2 rounded-xl btn btn-primary">Gabung Kelas</button
             >
             <a
                 href="/kelas/buat"

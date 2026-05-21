@@ -11,11 +11,14 @@ SELECT kelas.id, kelas.nama as nama_kelas, bagian, deskripsi, pengguna.nama as n
 WHERE murid.id_pengguna = $1;
 
 -- name: GetKelas :one
-select k.id, k.nama as nama_kelas, bagian, deskripsi, p.nama as nama_pengajar, kode, k.dibuat as dibuat from kelas k
+select k.nama as nama_kelas, bagian, deskripsi, p.nama as nama_pengajar from kelas k
 join pengguna p on p.id = k.pengajar where kode = $1;
 
 -- name: CreateKelas :exec
 insert into kelas (nama, bagian, deskripsi, pengajar, kode) values ($1, $2, $3, $4, $5);
+
+-- name: GetKelasCode :many
+select * from kelas where kode = $1;
 
 -- name: CreatePost :exec
 insert into post (nama, deskripsi, kode_kelas, tipe) values ($1, $2, $3, $4);
