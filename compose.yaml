@@ -1,15 +1,20 @@
 services:
+  migrations:
+    build: backend/internal/db
+    profiles:
+      - dev
+    env_file: .env
+    networks:
+      - network
+    depends_on:
+      - db
+
   api:
     build: backend
     entrypoint: /app/path_api
     networks:
       - network
-    environment:
-      GOOSE_DRIVER: postgres
-      GOOSE_MIGRATION_DIR: ./internal/db/migrations
-      GOOSE_DBSTRING: postgresql://wave:123123@path-db-1/path?sslmode=disable
-      SECRET: mypath
-
+    env_file: .env
     ports:
       - 3000:3000
     depends_on:
