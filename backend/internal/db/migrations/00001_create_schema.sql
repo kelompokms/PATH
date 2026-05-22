@@ -24,7 +24,7 @@ CREATE TABLE kelas (
 CREATE TABLE murid (
     id SERIAL PRIMARY KEY,
     id_pengguna INTEGER REFERENCES pengguna (id) NOT NULL UNIQUE,
-    kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
+    kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL UNIQUE,
     bergabung TIMESTAMP DEFAULT NOW()
 );
 

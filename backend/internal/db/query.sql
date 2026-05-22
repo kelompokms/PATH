@@ -20,6 +20,9 @@ insert into kelas (nama, bagian, pengajar, kode) values ($1, $2, $3, $4);
 -- name: GetKelasCode :many
 select * from kelas where kode = $1;
 
+-- name: CheckPenggunaInKelas :one
+select murid.id from murid where id_pengguna = $1 and kode_kelas = $2;
+
 -- name: JoinKelas :exec
 insert into murid (id_pengguna, kode_kelas) values ($1, $2);
 

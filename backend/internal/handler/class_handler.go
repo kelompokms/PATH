@@ -133,6 +133,17 @@ func (app *App) joinClass(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = app.db.CheckPenggunaInKelas(r.Context(), db.CheckPenggunaInKelasParams{
+		IDPengguna: userID,
+		KodeKelas:  code,
+	})
+
+	if err == nil {
+		log.Println(err)
+		http.Error(w, "user sudah terdaftarkan!", http.StatusBadRequest)
+		return
+	}
+
 	err = app.db.JoinKelas(r.Context(), db.JoinKelasParams{
 		IDPengguna: userID,
 		KodeKelas:  code,

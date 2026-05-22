@@ -27,6 +27,22 @@ func (q *Queries) CheckPengguna(ctx context.Context, email string) (CheckPenggun
 	return i, err
 }
 
+const checkPenggunaInKelas = `-- name: CheckPenggunaInKelas :one
+select murid.id from murid where id_pengguna = $1 and kode_kelas = $2
+`
+
+type CheckPenggunaInKelasParams struct {
+	IDPengguna int32
+	KodeKelas  string
+}
+
+func (q *Queries) CheckPenggunaInKelas(ctx context.Context, arg CheckPenggunaInKelasParams) (int32, error) {
+	row := q.db.QueryRow(ctx, checkPenggunaInKelas, arg.IDPengguna, arg.KodeKelas)
+	var id int32
+	err := row.Scan(&id)
+	return id, err
+}
+
 const createKelas = `-- name: CreateKelas :exec
 insert into kelas (nama, bagian, pengajar, kode) values ($1, $2, $3, $4)
 `
