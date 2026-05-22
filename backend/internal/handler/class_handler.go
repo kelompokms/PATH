@@ -65,16 +65,15 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("user ID:", userID)
 
-	nama := r.FormValue("nama")
+	nama := r.FormValue("nama_kelas")
 	bagian := r.FormValue("bagian")
-	deskripsi := r.FormValue("deskripsi")
 
 	if nama == "" {
 		http.Error(w, "input tidak lengkap!", http.StatusBadRequest)
 		return
 	}
 
-	if len(nama) > 64 || len(bagian) > 320 {
+	if len(nama) > 64 || len(bagian) > 64 {
 		http.Error(w, "nama kelas atau bagian terlalu panjang!", http.StatusBadRequest)
 		return
 	}
@@ -106,20 +105,19 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = app.db.CreateKelas(r.Context(), db.CreateKelasParams{
-		Nama:      nama,
-		Bagian:    pgtype.Text{String: bagian, Valid: true},
-		Deskripsi: pgtype.Text{String: deskripsi, Valid: true},
-		Pengajar:  validUserID,
-		Kode:      kode,
+		Nama:     nama,
+		Bagian:   pgtype.Text{String: bagian, Valid: true},
+		Pengajar: validUserID,
+		Kode:     kode,
 	})
 
-	// if err != nil {
-	// 	log.Println(err)
-	// 	http.Error(w, "gagal membuat kelas: "+err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "gagal membuat kelas: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	w.Write([]byte("berhasil membuat kelas!"))
+	w.Write([]byte(kode))
 }
 
 func (app *App) putClass(w http.ResponseWriter, r *http.Request) {

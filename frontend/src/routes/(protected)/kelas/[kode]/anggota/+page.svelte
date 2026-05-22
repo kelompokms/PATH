@@ -1,10 +1,12 @@
 <script>
     import CircleUser from "$lib/svg/circle-user.svelte";
 
+    let { data } = $props();
+
     const MURID = ["John Doe", "Foo", "Bar"];
 </script>
 
-<div class="p-2">
+<div class="max-w-7xl w-full mx-auto p-2">
     <div class="mb-6">
         <h3
             class="font-semibold text-2xl bg-purple-200 p-4 border-2 border-purple-900/10 rounded-t-lg"
@@ -12,7 +14,7 @@
             Pengajar
         </h3>
         <p class="p-4 border-2 border-t-0 border-black/15 rounded-b-lg">
-            Vereh
+            {data.NamaPengajar}
         </p>
     </div>
     <div>

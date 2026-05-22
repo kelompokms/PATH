@@ -1,10 +1,22 @@
 <script>
+    import { goto } from "$app/navigation";
     import { post } from "$lib/utils/api";
 
-    function handleForm(event) {
+    async function handleForm(event) {
         event.preventDefault();
 
-        post("");
+        let formData = new FormData(event.target);
+        console.log(formData);
+
+        const res = await post("class", formData);
+        const text = await res.text();
+
+        if (!res.ok) {
+            alert(text);
+            return;
+        }
+
+        goto("/kelas/" + text);
     }
 </script>
 
@@ -18,17 +30,10 @@
                 id="nama"
                 class="w-full input"
                 type="text"
-                name="nama"
+                name="nama_kelas"
             />
             <label for="bagian" class="w-full label">Bagian</label>
             <input id="bagian" class="w-full input" type="text" name="bagian" />
-            <label for="deskripsi" class="w-full label">Deskripsi kelas</label>
-            <input
-                id="deskripsi"
-                class="w-full input"
-                type="text"
-                name="deskripsi"
-            />
             <button class="mt-4 btn btn-primary" type="submit"
                 >Buat Kelas</button
             >

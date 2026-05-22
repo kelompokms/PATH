@@ -16,7 +16,6 @@ CREATE TABLE kelas (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(64) NOT NULL,
     bagian VARCHAR(64),
-    deskripsi VARCHAR(320),
     pengajar INTEGER REFERENCES pengguna (id) NOT NULL,
     kode VARCHAR(6) NOT NULL UNIQUE,
     dibuat TIMESTAMP DEFAULT NOW()

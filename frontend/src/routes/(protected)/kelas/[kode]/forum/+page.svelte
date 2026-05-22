@@ -1,4 +1,9 @@
 <script>
+    import { get } from "$lib/utils/api";
+    import { onMount } from "svelte";
+
+    let { data, params } = $props();
+
     const kelasItems = [
         {
             id: 1,
@@ -27,7 +32,18 @@
     ];
 </script>
 
-<div class="flex flex-col gap-4 p-2">
+<div class="flex flex-col gap-4 p-2 max-w-7xl mx-auto">
+    {#if data}
+        <div class="border-2 border-black/10 p-4 rounded-lg shadow-lg">
+            <h2 class="font-bold text-2xl">{data.NamaKelas}</h2>
+            <p class="mt-2">{data.Bagian}</p>
+        </div>
+    {:else}
+        <div class="border-2 border-black/10 p-4 rounded-lg shadow-lg">
+            <div class="font-bold text-2xl skeleton h-4"></div>
+            <div class="mt-4 h-8 skeleton"></div>
+        </div>
+    {/if}
     {#each kelasItems as item}
         <div>
             <p
@@ -35,7 +51,9 @@
             >
                 {item.nama}
             </p>
-            <p class="p-4 border-2 border-t-0 border-black/10 rounded-b-lg">
+            <p
+                class="p-4 border-2 border-t-0 border-black/10 bg-white rounded-b-lg"
+            >
                 {item.deskripsi}
             </p>
         </div>

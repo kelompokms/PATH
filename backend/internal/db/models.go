@@ -97,13 +97,12 @@ func (ns NullTipeMateri) Value() (driver.Value, error) {
 }
 
 type Kela struct {
-	ID        int32
-	Nama      string
-	Bagian    pgtype.Text
-	Deskripsi pgtype.Text
-	Pengajar  int32
-	Kode      string
-	Dibuat    pgtype.Timestamp
+	ID       int32
+	Nama     string
+	Bagian   pgtype.Text
+	Pengajar int32
+	Kode     string
+	Dibuat   pgtype.Timestamp
 }
 
 type Murid struct {

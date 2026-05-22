@@ -12,9 +12,11 @@
     ];
 </script>
 
-<div class="p-2">
+<div class="p-2 max-w-7xl w-full mx-auto">
     <div>
-        <h3 class="p-4 bg-purple-200 font-semibold text-2xl rounded-t-lg">
+        <h3
+            class="p-4 bg-purple-200 font-semibold text-2xl rounded-t-lg border-2 border-purple-900/10"
+        >
             Tugas
         </h3>
         {#each tugasItems as item}
