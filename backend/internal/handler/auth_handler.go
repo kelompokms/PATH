@@ -7,6 +7,7 @@ import (
 	"path_project/internal/utils"
 	"time"
 
+	"github.com/go-chi/jwtauth/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -59,4 +60,22 @@ func (app *App) login(w http.ResponseWriter, r *http.Request) {
 func (app *App) logout(w http.ResponseWriter, r *http.Request) {
 	utils.ClearCookie(w)
 	w.Write([]byte("Berhasil logout!"))
+}
+
+func (app *App) getAuth(w http.ResponseWriter, r *http.Request) {
+	_, claims, err := jwtauth.FromContext(r.Context())
+	if err != nil {
+		http.Error(w, "Gagal mendapatkan token: "+err.Error(), http.StatusBadRequest)
+	}
+
+	userId := int32(claims["user_id"].(float64))
+
+	_, err = app.db.GetPengguna(r.Context(), userId)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal mendapatkan pengguna", http.StatusBadRequest)
+		return
+	}
+
+	w.Write([]byte("User terautentikasi!"))
 }

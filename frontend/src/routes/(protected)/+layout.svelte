@@ -13,26 +13,10 @@
     import { redirect } from "@sveltejs/kit";
     import { onMount } from "svelte";
 
-    let { children } = $props();
-
-    let isAuth = $state(false);
-
-    onMount(async () => {
-        const res = await checkAuth();
-        const text = await res.text();
-
-        console.log(text);
-
-        if (!res.ok) {
-            goto("/login");
-            return;
-        }
-
-        isAuth = true;
-    });
+    let { data, children } = $props();
 </script>
 
-{#if isAuth}
+{#if data.isAuth}
     <div class="drawer lg:drawer-open h-screen">
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col h-screen">

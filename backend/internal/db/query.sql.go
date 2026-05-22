@@ -168,11 +168,25 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (GetPenggunaRow, er
 	return i, err
 }
 
+const joinKelas = `-- name: JoinKelas :exec
+insert into murid (id_pengguna, kode_kelas) values ($1, $2)
+`
+
+type JoinKelasParams struct {
+	IDPengguna int32
+	KodeKelas  string
+}
+
+func (q *Queries) JoinKelas(ctx context.Context, arg JoinKelasParams) error {
+	_, err := q.db.Exec(ctx, joinKelas, arg.IDPengguna, arg.KodeKelas)
+	return err
+}
+
 const listKelas = `-- name: ListKelas :many
-SELECT kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
-UNION
-SELECT kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat FROM kelas JOIN murid ON murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
-WHERE murid.id_pengguna = $1
+select kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat from kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
+union
+select kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat from kelas join murid on murid.kode_kelas = kelas.kode join pengguna on kelas.pengajar = pengguna.id
+where murid.id_pengguna = $1
 `
 
 type ListKelasRow struct {
@@ -212,24 +226,25 @@ func (q *Queries) ListKelas(ctx context.Context, pengajar int32) ([]ListKelasRow
 }
 
 const listMurid = `-- name: ListMurid :many
-select id, id_pengguna, kode_kelas, bergabung from murid where kode_kelas = $1
+select id_pengguna, nama, email from murid join pengguna on id_pengguna = pengguna.id where kode_kelas = $1
 `
 
-func (q *Queries) ListMurid(ctx context.Context, kodeKelas string) ([]Murid, error) {
+type ListMuridRow struct {
+	IDPengguna int32
+	Nama       string
+	Email      string
+}
+
+func (q *Queries) ListMurid(ctx context.Context, kodeKelas string) ([]ListMuridRow, error) {
 	rows, err := q.db.Query(ctx, listMurid, kodeKelas)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Murid
+	var items []ListMuridRow
 	for rows.Next() {
-		var i Murid
-		if err := rows.Scan(
-			&i.ID,
-			&i.IDPengguna,
-			&i.KodeKelas,
-			&i.Bergabung,
-		); err != nil {
+		var i ListMuridRow
+		if err := rows.Scan(&i.IDPengguna, &i.Nama, &i.Email); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -273,7 +288,7 @@ func (q *Queries) ListPengguna(ctx context.Context) ([]Pengguna, error) {
 }
 
 const listPost = `-- name: ListPost :many
-select id, nama, deskripsi, kode_kelas, tipe from post where kode_kelas = $1
+select id, nama, deskripsi, kode_kelas, tipe, dibuat from post where kode_kelas = $1
 `
 
 func (q *Queries) ListPost(ctx context.Context, kodeKelas string) ([]Post, error) {
@@ -291,6 +306,7 @@ func (q *Queries) ListPost(ctx context.Context, kodeKelas string) ([]Post, error
 			&i.Deskripsi,
 			&i.KodeKelas,
 			&i.Tipe,
+			&i.Dibuat,
 		); err != nil {
 			return nil, err
 		}

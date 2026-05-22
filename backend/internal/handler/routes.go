@@ -17,13 +17,14 @@ func (app *App) registerRoutes() {
 		rp.Use(jwtauth.Verifier(app.tokenAuth))
 		rp.Use(jwtauth.Authenticator(app.tokenAuth))
 
-		rp.Get("/auth", func(w http.ResponseWriter, r *http.Request) {})
+		rp.Get("/auth", app.getAuth)
 		rp.Get("/user", app.getUser)
-		rp.Patch("/user", app.patchUser)
 		rp.Get("/class", app.getClasses)
 		rp.Post("/class", app.createClass)
 		rp.Get("/class/{code}", app.getClass)
 		rp.Post("/class/{code}", app.createPost)
+		rp.Post("/class/{code}/join", app.joinClass)
+		rp.Get("/class/{code}/murid", app.getMurid)
 		rp.Put("/class/{code}/{postId}", app.putClass)
 	})
 

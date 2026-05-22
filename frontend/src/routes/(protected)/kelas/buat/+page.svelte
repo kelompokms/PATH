@@ -6,17 +6,14 @@
         event.preventDefault();
 
         let formData = new FormData(event.target);
-        console.log(formData);
 
         const res = await post("class", formData);
-        const text = await res.text();
-
         if (!res.ok) {
-            alert(text);
+            console.log(res);
             return;
         }
 
-        goto("/kelas/" + text);
+        goto("/kelas");
     }
 </script>
 

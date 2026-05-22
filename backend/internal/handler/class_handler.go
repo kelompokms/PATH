@@ -120,5 +120,59 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(kode))
 }
 
+func (app *App) joinClass(w http.ResponseWriter, r *http.Request) {
+	_, claims, _ := jwtauth.FromContext(r.Context())
+	userID := int32(claims["user_id"].(float64))
+
+	code := chi.URLParam(r, "code")
+
+	_, err := app.db.GetKelas(r.Context(), code)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "kelas tidak ditemukan", http.StatusNotFound)
+		return
+	}
+
+	err = app.db.JoinKelas(r.Context(), db.JoinKelasParams{
+		IDPengguna: userID,
+		KodeKelas:  code,
+	})
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal membuat kelas", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte("Sukses gabung kelas!"))
+}
+
 func (app *App) putClass(w http.ResponseWriter, r *http.Request) {
+}
+
+func (app *App) getMurid(w http.ResponseWriter, r *http.Request) {
+	code := chi.URLParam(r, "code")
+
+	murid, err := app.db.ListMurid(r.Context(), code)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal mendapatkan data murid", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	if len(murid) <= 0 {
+		w.Write([]byte("[]"))
+		return
+	}
+
+	jsonString, err := json.Marshal(murid)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal memproses data murid", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonString)
 }

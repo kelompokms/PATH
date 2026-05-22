@@ -43,7 +43,7 @@
         <button
             disabled={code == "" && kelas == undefined}
             onclick={() => {
-                post("/class/" + code + "/join", {});
+                post("class/" + code + "/join", {});
             }}
             class="p-2 btn btn-secondary">Gabung</button
         >

@@ -23,7 +23,7 @@ CREATE TABLE kelas (
 
 CREATE TABLE murid (
     id SERIAL PRIMARY KEY,
-    id_pengguna INTEGER REFERENCES pengguna (id) NOT NULL,
+    id_pengguna INTEGER REFERENCES pengguna (id) NOT NULL UNIQUE,
     kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
     bergabung TIMESTAMP DEFAULT NOW()
 );
@@ -33,7 +33,8 @@ CREATE TABLE post (
     nama VARCHAR(128) NOT NULL,
     deskripsi VARCHAR(255) NOT NULL,
     kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
-    tipe tipe_materi NOT NULL
+    tipe tipe_materi NOT NULL,
+    dibuat TIMESTAMP DEFAULT NOW()
 );
 
 -- +goose Down
