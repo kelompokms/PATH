@@ -1,6 +1,7 @@
 <script>
     import { goto } from "$app/navigation";
-    import Wolf from "$lib/assets/wolf.webp";
+    import class_color from "$lib/assets/class_color.webp";
+    import class_bg from "$lib/assets/class_bg.webp";
     import { post } from "$lib/utils/api";
 
     async function login(event) {
@@ -16,13 +17,13 @@
     }
 </script>
 
-<main class="bg-purple-100 flex flex-col justify-center items-center size-full">
+    <main class="bg-[#E5CFFE] bg-[url('/src/lib/assets/class_bg.webp')] bg-cover bg-center bg-blend-multiply flex flex-col justify-center items-center size-full">
     <div class="w-full max-w-md md:max-w-none text-center p-6">
         <div
             class="bg-white p-6 shadow-lg rounded-xl md:flex max-w-4xl md:mx-auto gap-4"
         >
             <img
-                src={Wolf}
+                src={class_color}
                 alt="login"
                 class="rounded-lg shadow-lg mb-4 md:mb-0 md:max-w-md"
             />

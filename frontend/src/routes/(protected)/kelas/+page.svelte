@@ -1,6 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
-    import Wolf from "$lib/assets/wolf.webp";
+    import Placeholder from "$lib/assets/placeholder_bg.webp";
     import { get } from "$lib/utils/api";
     import { onMount } from "svelte";
 
@@ -24,7 +24,7 @@
             <div
                 class="flex flex-col p-10 gap-6 bg-white rounded-lg shadow-lg w-full text-center"
             >
-                <img src={Wolf} class="rounded-full aspect-square" alt="" />
+                <img src={Placeholder} class="rounded-full aspect-square" alt="" />
                 <h3 class="font-semibold text-xl text-sky-900">
                     Tidak ada Kelas
                 </h3>
