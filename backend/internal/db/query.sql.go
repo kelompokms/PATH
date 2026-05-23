@@ -111,12 +111,13 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
 }
 
 const getKelas = `-- name: GetKelas :one
-select k.nama as nama_kelas, bagian, p.nama as nama_pengajar from kelas k
+select k.nama as nama_kelas, k.kode, bagian, p.nama as nama_pengajar from kelas k
 join pengguna p on p.id = k.pengajar where kode = $1
 `
 
 type GetKelasRow struct {
 	NamaKelas    string
+	Kode         string
 	Bagian       pgtype.Text
 	NamaPengajar string
 }
@@ -124,7 +125,12 @@ type GetKelasRow struct {
 func (q *Queries) GetKelas(ctx context.Context, kode string) (GetKelasRow, error) {
 	row := q.db.QueryRow(ctx, getKelas, kode)
 	var i GetKelasRow
-	err := row.Scan(&i.NamaKelas, &i.Bagian, &i.NamaPengajar)
+	err := row.Scan(
+		&i.NamaKelas,
+		&i.Kode,
+		&i.Bagian,
+		&i.NamaPengajar,
+	)
 	return i, err
 }
 

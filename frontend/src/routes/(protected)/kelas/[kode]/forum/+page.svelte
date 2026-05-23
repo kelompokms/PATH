@@ -37,6 +37,15 @@
         <div class="border-2 border-black/10 p-4 rounded-lg shadow-lg">
             <h2 class="font-bold text-2xl">{data.NamaKelas}</h2>
             <p class="mt-2">{data.Bagian}</p>
+            <button
+                onclick={(event) => {
+                    navigator.clipboard.writeText(data.Kode);
+                    alert("Kode kelas berhasil disalin");
+                }}
+                class="btn btn-ghost mt-4 font-bold text-xl text-black/50"
+            >
+                {data.Kode}
+            </button>
         </div>
     {:else}
         <div class="border-2 border-black/10 p-4 rounded-lg shadow-lg">
