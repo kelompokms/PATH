@@ -4,7 +4,7 @@ RUN pnpm runtime set node 24 -g
 WORKDIR /app
 COPY package*.json ./
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 COPY . .
 RUN pnpm build
