@@ -29,8 +29,8 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://*"},
-		AllowedMethods:   []string{"GET", "POST"},
+		AllowedOrigins:   []string{"http://localhost:5173", "http://localhost:3001", "https://path.maroisa.com"},
+		AllowedMethods:   []string{"GET", "POST", "PUT"},
 		AllowedHeaders:   []string{"*"},
 		AllowCredentials: true,
 	}))
