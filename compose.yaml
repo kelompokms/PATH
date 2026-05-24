@@ -23,10 +23,7 @@ services:
     restart: unless-stopped
   db:
     image: postgres:18-alpine
-    environment:
-      POSTGRES_USER: wave
-      POSTGRES_PASSWORD: 123123
-      POSTGRES_DB: path
+    env_file: .env
     networks:
       - network
     ports:
