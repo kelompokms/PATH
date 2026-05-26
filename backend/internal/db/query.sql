@@ -2,7 +2,7 @@
 select id_pengguna, nama, email from murid join pengguna on id_pengguna = pengguna.id where kode_kelas = $1;
 
 -- name: ListPost :many
-select * from post where kode_kelas = $1;
+select id, nama, deskripsi, tipe, dibuat from post where kode_kelas = $1 order by dibuat desc;
 
 -- name: ListKelas :many
 select kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat from kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1
@@ -11,7 +11,7 @@ select kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_penggun
 where murid.id_pengguna = $1;
 
 -- name: GetKelas :one
-select k.nama as nama_kelas, k.kode, bagian, p.nama as nama_pengajar from kelas k
+select k.nama as nama_kelas, k.kode, bagian, p.nama as nama_pengajar, $2 = p.id as is_pengajar from kelas k
 join pengguna p on p.id = k.pengajar where kode = $1;
 
 -- name: CreateKelas :exec

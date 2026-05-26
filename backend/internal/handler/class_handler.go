@@ -40,8 +40,13 @@ func (app *App) getClasses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) getClass(w http.ResponseWriter, r *http.Request) {
+	_, claims, _ := jwtauth.FromContext(r.Context())
+	user_id := int32(claims["user_id"].(float64))
 	kode := chi.URLParam(r, "code")
-	res, err := app.db.GetKelas(r.Context(), kode)
+	res, err := app.db.GetKelas(r.Context(), db.GetKelasParams{
+		Kode: kode,
+		ID:   user_id,
+	})
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "kelas tidak ditemukan", http.StatusNotFound)
@@ -126,7 +131,10 @@ func (app *App) joinClass(w http.ResponseWriter, r *http.Request) {
 
 	code := chi.URLParam(r, "code")
 
-	_, err := app.db.GetKelas(r.Context(), code)
+	_, err := app.db.GetKelas(r.Context(), db.GetKelasParams{
+		Kode: code,
+		ID:   int32(0),
+	})
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "kelas tidak ditemukan", http.StatusNotFound)
