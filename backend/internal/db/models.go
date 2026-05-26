@@ -128,5 +128,6 @@ type Post struct {
 	Deskripsi string
 	KodeKelas string
 	Tipe      TipeMateri
+	Tenggat   pgtype.Timestamp
 	Dibuat    pgtype.Timestamp
 }

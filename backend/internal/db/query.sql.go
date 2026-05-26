@@ -90,13 +90,14 @@ func (q *Queries) CreatePengguna(ctx context.Context, arg CreatePenggunaParams) 
 }
 
 const createPost = `-- name: CreatePost :exec
-insert into post (nama, deskripsi, kode_kelas, tipe) values ($1, $2, $3, $4)
+insert into post (nama, deskripsi, kode_kelas, tenggat, tipe) values ($1, $2, $3, $4, $5)
 `
 
 type CreatePostParams struct {
 	Nama      string
 	Deskripsi string
 	KodeKelas string
+	Tenggat   pgtype.Timestamp
 	Tipe      TipeMateri
 }
 
@@ -105,6 +106,7 @@ func (q *Queries) CreatePost(ctx context.Context, arg CreatePostParams) error {
 		arg.Nama,
 		arg.Deskripsi,
 		arg.KodeKelas,
+		arg.Tenggat,
 		arg.Tipe,
 	)
 	return err
@@ -317,7 +319,7 @@ func (q *Queries) ListPengguna(ctx context.Context) ([]Pengguna, error) {
 }
 
 const listPost = `-- name: ListPost :many
-select id, nama, deskripsi, tipe, dibuat from post where kode_kelas = $1 order by dibuat desc
+select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 order by dibuat desc
 `
 
 type ListPostRow struct {
@@ -325,6 +327,7 @@ type ListPostRow struct {
 	Nama      string
 	Deskripsi string
 	Tipe      TipeMateri
+	Tenggat   pgtype.Timestamp
 	Dibuat    pgtype.Timestamp
 }
 
@@ -342,6 +345,45 @@ func (q *Queries) ListPost(ctx context.Context, kodeKelas string) ([]ListPostRow
 			&i.Nama,
 			&i.Deskripsi,
 			&i.Tipe,
+			&i.Tenggat,
+			&i.Dibuat,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listPostTugas = `-- name: ListPostTugas :many
+select id, nama, deskripsi, tenggat, dibuat from post where kode_kelas = $1 and tipe = 'tugas' order by dibuat desc
+`
+
+type ListPostTugasRow struct {
+	ID        int32
+	Nama      string
+	Deskripsi string
+	Tenggat   pgtype.Timestamp
+	Dibuat    pgtype.Timestamp
+}
+
+func (q *Queries) ListPostTugas(ctx context.Context, kodeKelas string) ([]ListPostTugasRow, error) {
+	rows, err := q.db.Query(ctx, listPostTugas, kodeKelas)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ListPostTugasRow
+	for rows.Next() {
+		var i ListPostTugasRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nama,
+			&i.Deskripsi,
+			&i.Tenggat,
 			&i.Dibuat,
 		); err != nil {
 			return nil, err

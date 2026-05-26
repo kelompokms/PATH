@@ -25,6 +25,7 @@ func (app *App) registerRoutes() {
 		rp.Post("/class/{code}/join", app.joinClass)
 		rp.Get("/class/{code}/post", app.getPost)
 		rp.Post("/class/{code}/post", app.createPost)
+		rp.Get("/class/{code}/tugas", app.getTugas)
 		rp.Get("/class/{code}/murid", app.getMurid)
 		rp.Put("/class/{code}/{postId}", app.putClass)
 	})
