@@ -18,7 +18,7 @@
 
 {#if post == undefined || post == null}
     <div
-        class="h-screen w-screen absolute left-0 top-0 p-4 flex flex-col gap-4"
+        class="h-screen w-screen absolute left-0 top-0 p-4 flex flex-col gap-4 z-3"
     >
         <div class="skeleton h-12"></div>
         <div class="skeleton h-32"></div>
@@ -30,9 +30,11 @@
         </div>
     </div>
 {:else}
-    <div class="h-screen w-screen overflow-auto absolute left-0 top-0">
+    <div
+        class="h-screen w-screen overflow-auto absolute left-0 top-0 z-3 md:py-4"
+    >
         <div
-            class="max-w-7xl mx-auto bg-white p-4 pcard h-full flex flex-col gap-2"
+            class="md:max-w-7xl mx-auto bg-white p-4 pcard h-full flex flex-col gap-2"
         >
             <button
                 onclick={() => goto("/kelas/" + params.kode + "/post")}
@@ -60,7 +62,7 @@
             <p>{post.Deskripsi}</p>
             {#if post.Tenggat}
                 <div class="absolute bottom-0 left-0 w-full">
-                    <div class="p-4">
+                    <div class="p-4 max-w-7xl mx-auto md:pb-8">
                         <p class="text-red-900 mb-4 text-center">
                             Tenggat Pengerjaan:
                             {new Date(post.Dibuat).toLocaleString("id-ID", {

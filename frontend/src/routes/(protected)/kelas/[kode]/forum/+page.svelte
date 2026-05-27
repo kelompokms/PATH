@@ -26,7 +26,7 @@
             <h2 class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-md">
                 {data.NamaKelas}
             </h2>
-            <p>{data.Bagian}</p>
+            <p class="p-4">{data.Bagian}</p>
             <button
                 onclick={(event) => {
                     navigator.clipboard.writeText(data.Kode);
