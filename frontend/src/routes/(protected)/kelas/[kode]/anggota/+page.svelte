@@ -14,6 +14,10 @@
         </h3>
         <p class="p-4 border-2 border-t-0 border-black/15 rounded-b-lg">
             {data.NamaPengajar}
+
+            {#if data.IsPengajar}
+                <span class="font-semibold">(saya)</span>
+            {/if}
         </p>
     </div>
     {#if data.murid}

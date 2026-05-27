@@ -68,9 +68,10 @@ func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// TODO: sesuaikan layout dengan format javascript
-		parsedTenggat, err := time.Parse("", tenggat)
+		parsedTenggat, err := time.Parse("2006-01-02T15:04:05.000Z07:00", tenggat)
 		if err != nil {
-			http.Error(w, "Gagal mendapatkan tenggat", http.StatusBadRequest)
+			log.Println(err)
+			http.Error(w, "Tenggat tugas tidak valid!", http.StatusBadRequest)
 			return
 		}
 

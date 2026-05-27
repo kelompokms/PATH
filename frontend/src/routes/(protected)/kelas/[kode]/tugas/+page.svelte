@@ -1,15 +1,19 @@
 <script>
     import AngleRight from "$lib/svg/angle-right.svelte";
     import Pencil from "$lib/svg/pencil.svelte";
+    import { get } from "$lib/utils/api";
+    import { onMount } from "svelte";
 
-    const tugasItems = [
-        { id: 1, nama: "Tugas 1", deadline: "2026-05-05" },
-        { id: 2, nama: "Tugas 2", deadline: "2026-05-05" },
-        { id: 3, nama: "Tugas 3", deadline: "2026-05-05" },
-        { id: 4, nama: "Tugas 4", deadline: "2026-05-05" },
-        { id: 5, nama: "Tugas 5", deadline: "2026-05-05" },
-        { id: 6, nama: "Tugas 6", deadline: "2026-05-05" },
-    ];
+    let { params } = $props();
+    let tugas = $state([]);
+
+    onMount(async () => {
+        const res = await get("class/" + params.kode + "/tugas");
+        if (!res) {
+            return;
+        }
+        tugas = res;
+    });
 </script>
 
 <div class="p-2 max-w-7xl w-full mx-auto">
@@ -19,7 +23,7 @@
         >
             Tugas
         </h3>
-        {#each tugasItems as item}
+        {#each tugas as item}
             <div
                 class="flex items-center gap-4 p-4 border-2 border-t-0 border-black/10 last:rounded-b-lg"
             >
@@ -28,10 +32,10 @@
                 >
                     <Pencil />
                 </button>
-                <p class="font-semibold grow">{item.nama}</p>
+                <p class="font-semibold grow">{item.Nama}</p>
                 <p>
                     <strong>Tenggat:</strong>
-                    {item.deadline}
+                    {item.Tenggat}
                 </p>
                 <button
                     class="btn btn-secondary btn-square rounded-full *:first:size-6"
