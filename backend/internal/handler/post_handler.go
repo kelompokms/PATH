@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"path_project/internal/db"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -13,10 +14,37 @@ import (
 
 func (app *App) getPost(w http.ResponseWriter, r *http.Request) {
 	code := chi.URLParam(r, "code")
-	if code == "" {
-		http.Error(w, "URL tidak valid!", http.StatusBadRequest)
+	postID, err := strconv.Atoi(chi.URLParam(r, "postID"))
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal membaca ID post", http.StatusBadRequest)
 		return
 	}
+
+	post, err := app.db.GetPost(r.Context(), db.GetPostParams{
+		KodeKelas: code,
+		ID:        int32(postID),
+	})
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal mendapatkan post", http.StatusBadRequest)
+		return
+	}
+
+	jsonString, err := json.Marshal(post)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Gagal memproses respon", http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(jsonString)
+
+}
+
+func (app *App) getPosts(w http.ResponseWriter, r *http.Request) {
+	code := chi.URLParam(r, "code")
 
 	posts, err := app.db.ListPost(r.Context(), code)
 	if err != nil {

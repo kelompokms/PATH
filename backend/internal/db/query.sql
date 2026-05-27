@@ -4,6 +4,9 @@ select id_pengguna, nama, email from murid join pengguna on id_pengguna = penggu
 -- name: ListPost :many
 select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 order by dibuat desc;
 
+-- name: GetPost :one
+select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 and id = $2;
+
 -- name: CreatePost :exec
 insert into post (nama, deskripsi, kode_kelas, tenggat, tipe) values ($1, $2, $3, $4, $5);
 

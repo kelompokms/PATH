@@ -20,9 +20,13 @@
     class="flex flex-col gap-4 p-2 max-w-7xl w-full mx-auto grow overflow-auto"
 >
     {#if data}
-        <div class="border-2 border-black/10 p-4 rounded-md shadow-md">
-            <h2 class="font-bold text-2xl">{data.NamaKelas}</h2>
-            <p class="mt-2">{data.Bagian}</p>
+        <div
+            class="flex flex-col border-2 rounded-md border-black/20 bg-purple-50"
+        >
+            <h2 class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-md">
+                {data.NamaKelas}
+            </h2>
+            <p>{data.Bagian}</p>
             <button
                 onclick={(event) => {
                     navigator.clipboard.writeText(data.Kode);
@@ -32,6 +36,14 @@
             >
                 {data.Kode}
             </button>
+            {#if data.IsPengajar}
+                <button
+                    onclick={() => goto("buat")}
+                    class="btn btn-primary border-0 rounded-t-0"
+                >
+                    Buat Postingan
+                </button>
+            {/if}
         </div>
     {:else}
         <div class="border-2 border-black/10 p-4 rounded-md shadow-md">
@@ -51,20 +63,14 @@
                 >
             {/if}
         </div>
-    {:else}
-        {#if data.IsPengajar}
-            <button
-                onclick={() => goto("buat")}
-                class="btn btn-primary *:first:size-4 mb-4"
-            >
-                Buat Postingan
-            </button>
-        {/if}
     {/if}
     {#each posts as post}
-        <div>
+        <button
+            onclick={() => goto("/kelas/" + params.kode + "/post/" + post.ID)}
+            class="text-left"
+        >
             <p
-                class={`p-4 rounded-t-md border-2 border-purple-900/15 border-b-0 font-semibold text-2xl ${post.Tipe == "tugas" ? "bg-blue-200" : "bg-purple-200"}`}
+                class={`p-4 rounded-t-md border-2 border-purple-900/15 border-b-0 font-semibold text-lg md:text-2xl ${post.Tipe == "tugas" ? "bg-primary" : "bg-secondary"}`}
             >
                 {post.Nama}
             </p>
@@ -83,6 +89,6 @@
                     </p>
                 {/if}
             </div>
-        </div>
+        </button>
     {/each}
 </div>

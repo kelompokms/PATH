@@ -1,8 +1,16 @@
 <script>
     import CircleUser from "$lib/svg/circle-user.svelte";
+    import { get } from "$lib/utils/api.js";
     import { onMount } from "svelte";
 
-    let { data } = $props();
+    let { data, params } = $props();
+
+    let murid = $state([]);
+
+    onMount(async () => {
+        const res = await get("class/" + params.kode + "/murid");
+        murid = res;
+    });
 </script>
 
 <div class="max-w-7xl w-full mx-auto p-2">
@@ -20,7 +28,7 @@
             {/if}
         </p>
     </div>
-    {#if data.murid}
+    {#if murid}
         <div>
             <h3
                 class="font-semibold text-2xl bg-purple-200 p-4 border-2 border-purple-900/15 rounded-t-lg"
@@ -28,7 +36,7 @@
                 Teman Sekelas
             </h3>
             <div>
-                {#each data.murid as item}
+                {#each murid as item}
                     <div
                         class="p-4 border-b-2 border-black/15 last:rounded-b-lg border-x-2 flex gap-2 items-center *:first:size-8 *:first:bg-purple-200 *:first:rounded-full"
                     >

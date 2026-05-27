@@ -199,6 +199,38 @@ func (q *Queries) GetPengguna(ctx context.Context, id int32) (GetPenggunaRow, er
 	return i, err
 }
 
+const getPost = `-- name: GetPost :one
+select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 and id = $2
+`
+
+type GetPostParams struct {
+	KodeKelas string
+	ID        int32
+}
+
+type GetPostRow struct {
+	ID        int32
+	Nama      string
+	Deskripsi string
+	Tipe      TipeMateri
+	Tenggat   pgtype.Timestamp
+	Dibuat    pgtype.Timestamp
+}
+
+func (q *Queries) GetPost(ctx context.Context, arg GetPostParams) (GetPostRow, error) {
+	row := q.db.QueryRow(ctx, getPost, arg.KodeKelas, arg.ID)
+	var i GetPostRow
+	err := row.Scan(
+		&i.ID,
+		&i.Nama,
+		&i.Deskripsi,
+		&i.Tipe,
+		&i.Tenggat,
+		&i.Dibuat,
+	)
+	return i, err
+}
+
 const joinKelas = `-- name: JoinKelas :exec
 insert into murid (id_pengguna, kode_kelas) values ($1, $2)
 `

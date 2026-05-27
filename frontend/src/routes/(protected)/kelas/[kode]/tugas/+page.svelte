@@ -1,4 +1,5 @@
 <script>
+    import { goto } from "$app/navigation";
     import AngleRight from "$lib/svg/angle-right.svelte";
     import Pencil from "$lib/svg/pencil.svelte";
     import { get } from "$lib/utils/api";
@@ -19,7 +20,7 @@
 <div class="p-2 max-w-7xl w-full mx-auto">
     <div>
         <h3
-            class="p-4 bg-purple-200 font-semibold text-2xl rounded-t-lg border-2 border-purple-900/10"
+            class="p-4 bg-primary font-semibold text-2xl rounded-t-lg border-2 border-purple-900/10"
         >
             Tugas
         </h3>
@@ -27,9 +28,7 @@
             <div
                 class="flex items-center gap-4 p-4 border-2 border-t-0 border-black/10 last:rounded-b-lg"
             >
-                <button
-                    class="btn btn-secondary rounded-full p-2 *:first:size-6"
-                >
+                <button class="btn btn-primary rounded-full p-2 *:first:size-6">
                     <Pencil />
                 </button>
                 <div class="flex flex-col grow">
@@ -42,7 +41,9 @@
                     </p>
                 </div>
                 <button
-                    class="btn btn-secondary btn-square rounded-full *:first:size-6"
+                    class="btn btn-primary btn-square rounded-full *:first:size-6"
+                    onclick={() =>
+                        goto("/kelas/" + params.kode + "/post/" + item.ID)}
                 >
                     <AngleRight />
                 </button>
