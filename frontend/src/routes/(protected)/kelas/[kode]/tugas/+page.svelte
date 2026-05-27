@@ -32,11 +32,15 @@
                 >
                     <Pencil />
                 </button>
-                <p class="font-semibold grow">{item.Nama}</p>
-                <p>
-                    <strong>Tenggat:</strong>
-                    {item.Tenggat}
-                </p>
+                <div class="flex flex-col grow">
+                    <p class="font-semibold grow">{item.Nama}</p>
+                    <p class="text-red-900 text-sm">
+                        {new Date(item.Tenggat).toLocaleString("id-ID", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                        })}
+                    </p>
+                </div>
                 <button
                     class="btn btn-secondary btn-square rounded-full *:first:size-6"
                 >

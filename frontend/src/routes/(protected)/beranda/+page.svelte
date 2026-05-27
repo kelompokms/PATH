@@ -5,14 +5,14 @@
 
 <main class="flex justify-center items-center">
     <div class="flex flex-col p-8 w-full gap-4 md:max-w-md">
-        <div class="bg-white p-10 text-center rounded-lg shadow-md">
+        <div class="bg-white p-10 text-center rounded-md shadow-md">
             <!-- Gambar Di sini -->
             <img
                 class="aspect-square rounded-full mb-4"
                 src={Wolf}
                 alt="gambar beranda"
             />
-            <p class="text-lg font-semibold">
+            <p class="text-md font-semibold">
                 <span class="text-sky-800">Gabung Kelas</span>
                 atau
                 <span class="text-sky-800">Buat Kelas</span>
@@ -21,11 +21,11 @@
         <div class="flex gap-2">
             <button
                 onclick={() => goto("/kelas/gabung")}
-                class="grow p-2 rounded-xl btn btn-primary">Gabung Kelas</button
+                class="grow p-2 rounded-md btn btn-primary">Gabung Kelas</button
             >
             <a
                 href="/kelas/buat"
-                class="grow p-2 rounded-xl btn btn-primary btn-ghost text-blue-900 border-2 border-blue-100"
+                class="grow p-2 rounded-md btn btn-primary btn-ghost text-blue-900 border-2 border-blue-100"
                 >Buat Kelas</a
             >
         </div>

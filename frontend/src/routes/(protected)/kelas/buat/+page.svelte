@@ -19,7 +19,7 @@
 
 <main class="flex justify-center items-center">
     <form class="w-full max-w-sm" onsubmit={handleForm}>
-        <fieldset class="fieldset rounded-lg shadow-lg p-8 bg-white">
+        <fieldset class="fieldset rounded-md shadow-md p-8 bg-white">
             <legend class="fieldset-legend">Buat Kelas</legend>
             <label for="nama" class="w-full label">Nama Kelas *</label>
             <input

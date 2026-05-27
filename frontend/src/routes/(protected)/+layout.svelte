@@ -1,6 +1,7 @@
 <script>
-    import { goto } from "$app/navigation";
+    import { goto, onNavigate } from "$app/navigation";
     import DrawerItem from "$lib/components/DrawerItem.svelte";
+    import AngleRight from "$lib/svg/angle-right.svelte";
     import Bars from "$lib/svg/bars.svelte";
     import Calendar from "$lib/svg/calendar.svelte";
     import ChalkboardUser from "$lib/svg/chalkboard-user.svelte";
@@ -15,13 +16,31 @@
 
     let { children } = $props();
     let isAuth = $state(false);
+    let breadcrumbs = $state([]);
 
     onMount(async () => {
         const res = await checkAuth();
         if (!res.ok) goto("/login");
-
         isAuth = true;
+
+        breadcrumbs = getNavData(window.location.pathname);
     });
+
+    onNavigate((navigation) => {
+        breadcrumbs = getNavData(navigation.to.url.pathname);
+    });
+
+    function getNavData(pathname) {
+        const pathArr = pathname.split("/").slice(1);
+        let pathData = [];
+        let tempPath = "";
+
+        for (let i = 0; i < pathArr.length; i++) {
+            tempPath += "/" + pathArr[i];
+            pathData.push({ name: pathArr[i], href: tempPath });
+        }
+        return pathData;
+    }
 </script>
 
 {#if isAuth}
@@ -29,7 +48,7 @@
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col h-screen">
             <!-- Navbar -->
-            <nav class="navbar w-full">
+            <nav class="navbar w-full shadow-md/5">
                 <label
                     for="drawer-toggle"
                     aria-label="open sidebar"
@@ -37,9 +56,18 @@
                 >
                     <Bars />
                 </label>
-                <div class="px-4">
+                <button onclick={() => goto("/")} class="btn btn-ghost px-2">
                     <h1 class="text-3xl font-bold">PATH</h1>
-                </div>
+                </button>
+                {#each breadcrumbs as item}
+                    <div class="*:first:size-6 flex items-center">
+                        <AngleRight />
+                        <button
+                            onclick={() => goto(item.href)}
+                            class="btn btn-ghost p-1">{item.name}</button
+                        >
+                    </div>
+                {/each}
             </nav>
 
             <!-- Content -->

@@ -35,16 +35,16 @@
         </div>
     </main>
 {:else}
-    <main class="flex flex-wrap gap-8 p-0 md:p-4">
+    <main class="flex flex-wrap gap-4 p-0 md:p-4 h-fit">
         {#each kelas as i}
             <a
                 href={"/kelas/" + i.Kode + "/forum"}
-                class="card w-100 h-fit text-left shadow-sm transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
+                class="card rounded-md w-100 h-min text-left shadow-md transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
             >
                 <figure>
                     <img src={Wolf} alt="" class="aspect-video" />
                 </figure>
-                <div class="card-body p-4">
+                <div class="card-body p-3 border-2 border-purple-900/10 gap-1">
                     <h2 class="card-title">{i.NamaKelas}</h2>
                     <p>{i.NamaPengguna}</p>
                 </div>
