@@ -56,7 +56,10 @@
                 >
                     <Bars />
                 </label>
-                <button onclick={() => goto("/")} class="btn btn-ghost px-2">
+                <button
+                    onclick={() => goto("/beranda")}
+                    class="btn btn-ghost px-2"
+                >
                     <h1 class="text-3xl font-bold">PATH</h1>
                 </button>
                 {#each breadcrumbs as item}
