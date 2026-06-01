@@ -2,8 +2,12 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"path_project/internal/db"
 	"strconv"
 	"time"
@@ -65,6 +69,14 @@ func (app *App) getPosts(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(50 << 20)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "File terlalu besar! (maks. 20 MB)", http.StatusBadRequest)
+		return
+	}
+
 	code := chi.URLParam(r, "code")
 	nama := r.FormValue("nama")
 	deskripsi := r.FormValue("deskripsi")
@@ -81,12 +93,58 @@ func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var savedFileURL []string
+	files := r.MultipartForm.File["file"]
+
+	if len(files) > 0 {
+		uploadDir := filepath.Join("./uploads", code)
+		if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
+			log.Println("Gagal membuat direktori upload:", err)
+			http.Error(w, "Gagal memproses file", http.StatusInternalServerError)
+			return
+		}
+
+		for _, fileHeader := range files {
+			file, err := fileHeader.Open()
+			if err != nil {
+				log.Println("Gagal membuka file:", err)
+				http.Error(w, "Gagal membaca beberapa file", http.StatusBadRequest)
+				return
+			}
+
+			originalFileName := fileHeader.Filename
+			filePath := filepath.Join(uploadDir, originalFileName)
+
+			dst, err := os.Create(filePath)
+			if err != nil {
+				file.Close()
+				log.Println("Gagal membuat file di lokal:", err)
+				http.Error(w, "Gagal memproses file", http.StatusInternalServerError)
+				return
+			}
+
+			_, err = io.Copy(dst, file)
+			file.Close()
+			dst.Close()
+
+			if err != nil {
+				log.Println("Gagal menyimpan file:", err)
+				http.Error(w, "Gagal menyimpan beberapa file", http.StatusInternalServerError)
+				return
+			}
+
+			fileURL := fmt.Sprintf("/files/%s/%s", code, originalFileName)
+			savedFileURL = append(savedFileURL, fileURL)
+		}
+	}
+
 	newPost := db.CreatePostParams{
 		Nama:      nama,
 		Deskripsi: deskripsi,
 		KodeKelas: code,
 		Tenggat:   pgtype.Timestamp{Valid: false},
 		Tipe:      db.TipeMateri(tipe),
+		File:      savedFileURL,
 	}
 
 	if tipe == "tugas" {
@@ -109,7 +167,7 @@ func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err := app.db.CreatePost(r.Context(), newPost)
+	err = app.db.CreatePost(r.Context(), newPost)
 
 	if err != nil {
 		log.Println(err)
@@ -118,29 +176,4 @@ func (app *App) createPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte("post berhasil dibuat!"))
-}
-
-func (app *App) getTugas(w http.ResponseWriter, r *http.Request) {
-	code := chi.URLParam(r, "code")
-	if code == "" {
-		http.Error(w, "URL tidak valid!", http.StatusBadRequest)
-		return
-	}
-
-	posts, err := app.db.ListPostTugas(r.Context(), code)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Gagal mendapatkan posts!", http.StatusBadGateway)
-		return
-	}
-
-	jsonString, err := json.Marshal(posts)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Gagal mendapatkan postingan", http.StatusBadGateway)
-		return
-	}
-
-	w.Header().Set("content-type", "application/json")
-	w.Write(jsonString)
 }

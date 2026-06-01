@@ -2,6 +2,8 @@ package handler
 
 import (
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
@@ -29,6 +31,10 @@ func (app *App) registerRoutes() {
 		rp.Get("/class/{code}/tugas", app.getTugas)
 		rp.Get("/class/{code}/murid", app.getMurid)
 		rp.Put("/class/{code}/{postId}", app.putClass)
+
+		workDir, _ := os.Getwd()
+		filesDir := http.Dir(filepath.Join(workDir, "uploads"))
+		FileServer(rp, "/files", filesDir)
 	})
 
 }

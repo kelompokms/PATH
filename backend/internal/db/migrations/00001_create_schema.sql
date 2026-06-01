@@ -35,6 +35,7 @@ CREATE TABLE post (
     kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
     tipe tipe_materi NOT NULL,
     tenggat TIMESTAMP,
+    file VARCHAR(255)[],
     dibuat TIMESTAMP DEFAULT NOW()
 );
 

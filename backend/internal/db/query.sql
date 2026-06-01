@@ -2,16 +2,17 @@
 select id_pengguna, nama, email from murid join pengguna on id_pengguna = pengguna.id where kode_kelas = $1;
 
 -- name: ListPost :many
-select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 order by dibuat desc;
-
--- name: GetPost :one
-select id, nama, deskripsi, tipe, tenggat, dibuat from post where kode_kelas = $1 and id = $2;
-
--- name: CreatePost :exec
-insert into post (nama, deskripsi, kode_kelas, tenggat, tipe) values ($1, $2, $3, $4, $5);
+select id, nama, deskripsi, tipe, tenggat, dibuat, file from post where kode_kelas = $1 order by dibuat desc;
 
 -- name: ListPostTugas :many
-select id, nama, deskripsi, tenggat, dibuat from post where kode_kelas = $1 and tipe = 'tugas' order by dibuat desc;
+select id, nama, deskripsi, tenggat, dibuat, file from post where kode_kelas = $1 and tipe = 'tugas' order by dibuat desc;
+
+-- name: GetPost :one
+select id, nama, deskripsi, tipe, tenggat, dibuat, file from post where kode_kelas = $1 and id = $2;
+
+-- name: CreatePost :exec
+insert into post (nama, deskripsi, kode_kelas, tenggat, tipe, file) values ($1, $2, $3, $4, $5, $6);
+
 
 -- name: ListKelas :many
 select kelas.id, kelas.nama as nama_kelas, bagian, pengguna.nama as nama_pengguna, kode, kelas.dibuat from kelas join pengguna on kelas.pengajar = pengguna.id WHERE kelas.pengajar = $1

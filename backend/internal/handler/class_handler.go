@@ -68,8 +68,6 @@ func (app *App) createClass(w http.ResponseWriter, r *http.Request) {
 	_, claims, _ := jwtauth.FromContext(r.Context())
 	userID := int32(claims["user_id"].(float64))
 
-	log.Println("user ID:", userID)
-
 	nama := r.FormValue("nama_kelas")
 	bagian := r.FormValue("bagian")
 
