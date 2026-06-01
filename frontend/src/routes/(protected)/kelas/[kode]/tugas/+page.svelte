@@ -1,38 +1,49 @@
 <script>
+    import { goto } from "$app/navigation";
     import AngleRight from "$lib/svg/angle-right.svelte";
     import Pencil from "$lib/svg/pencil.svelte";
+    import { get } from "$lib/utils/api";
+    import { onMount } from "svelte";
 
-    const tugasItems = [
-        { id: 1, nama: "Tugas 1", deadline: "2026-05-05" },
-        { id: 2, nama: "Tugas 2", deadline: "2026-05-05" },
-        { id: 3, nama: "Tugas 3", deadline: "2026-05-05" },
-        { id: 4, nama: "Tugas 4", deadline: "2026-05-05" },
-        { id: 5, nama: "Tugas 5", deadline: "2026-05-05" },
-        { id: 6, nama: "Tugas 6", deadline: "2026-05-05" },
-    ];
+    let { params } = $props();
+    let tugas = $state([]);
+
+    onMount(async () => {
+        const res = await get("class/" + params.kode + "/tugas");
+        if (!res) {
+            return;
+        }
+        tugas = res;
+    });
 </script>
 
-<div class="p-2">
+<div class="p-2 max-w-7xl w-full mx-auto">
     <div>
-        <h3 class="p-4 bg-purple-200 font-semibold text-2xl rounded-t-lg">
+        <h3
+            class="p-4 bg-primary font-semibold text-2xl rounded-t-lg border-2 border-purple-900/10"
+        >
             Tugas
         </h3>
-        {#each tugasItems as item}
+        {#each tugas as item}
             <div
                 class="flex items-center gap-4 p-4 border-2 border-t-0 border-black/10 last:rounded-b-lg"
             >
-                <button
-                    class="btn btn-secondary rounded-full p-2 *:first:size-6"
-                >
+                <button class="btn btn-primary rounded-full p-2 *:first:size-6">
                     <Pencil />
                 </button>
-                <p class="font-semibold grow">{item.nama}</p>
-                <p>
-                    <strong>Tenggat:</strong>
-                    {item.deadline}
-                </p>
+                <div class="flex flex-col grow">
+                    <p class="font-semibold grow">{item.Nama}</p>
+                    <p class="text-red-900 text-sm">
+                        {new Date(item.Tenggat).toLocaleString("id-ID", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                        })}
+                    </p>
+                </div>
                 <button
-                    class="btn btn-secondary btn-square rounded-full *:first:size-6"
+                    class="btn btn-primary btn-square rounded-full *:first:size-6"
+                    onclick={() =>
+                        goto("/kelas/" + params.kode + "/post/" + item.ID)}
                 >
                     <AngleRight />
                 </button>

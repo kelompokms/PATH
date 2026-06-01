@@ -1,4 +1,5 @@
 <script>
+    import { goto } from "$app/navigation";
     import { get, post } from "$lib/utils/api";
 
     let code = $state("");
@@ -42,8 +43,15 @@
         {/if}
         <button
             disabled={code == "" && kelas == undefined}
-            onclick={() => {
-                post("/class/" + code + "/join", {});
+            onclick={async () => {
+                const classCode = code;
+                const res = await post("class/" + code + "/join", {});
+                if (!res.ok) {
+                    const text = await res.text();
+                    alert(text);
+                    return;
+                }
+                goto("/kelas/" + classCode + "/forum");
             }}
             class="p-2 btn btn-secondary">Gabung</button
         >

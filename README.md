@@ -10,9 +10,27 @@ Personal Adaptive Teaching Hub (PATH)
 
 ### Cara Menjalankan
 
+1. Clone repository
+```bash
+git clone https://github.com/kelompokms/PATH.git
+cd PATH
+```
+2. Rename `.env.example` menjadi `.env`. Lalu isikan (deskripsi di dalam)
+
+3. Pada direktori frontend, rename `.env.example` menjadi `.env`. Lalu isikan (deskripsi di dalam)
+
+4. Jalankan compose
 ```bash
 docker compose up -d --build
-docker exec -it path-api-1 sh
+```
+
+5. Jalankan migrations
+```bash
+docker compose up -d migrations
+docker exec -it path-migrations-1 sh
+
+# Setelah masuk ke container
+goose down
 goose up
 ```
 

@@ -1,4 +1,15 @@
 services:
+  migrations:
+    build: backend/internal/db
+    profiles:
+      - dev
+    env_file: .env
+    networks:
+      - network
+    depends_on:
+      - db
+    command: sleep infinity
+
   api:
     build: backend
     entrypoint: /app/path_api
@@ -16,12 +27,9 @@ services:
     restart: unless-stopped
   db:
     image: postgres:18-alpine
-    environment:
-      POSTGRES_USER: wave
-      POSTGRES_PASSWORD: 123123
-      POSTGRES_DB: path
+    env_file: .env
     networks:
-      - path_network
+      - network
     ports:
       - 5433:5432
     restart: unless-stopped
@@ -29,12 +37,12 @@ services:
     entrypoint: node /app/build/index.js
     build: frontend
     networks:
-      - path_network
+      - network
     ports:
       - 3001:3000
 
 networks:
-  path_network:
+  network:
     driver: bridge
 
 volumes:

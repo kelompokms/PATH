@@ -16,7 +16,6 @@ CREATE TABLE kelas (
     id SERIAL PRIMARY KEY,
     nama VARCHAR(64) NOT NULL,
     bagian VARCHAR(64),
-    deskripsi VARCHAR(320),
     pengajar INTEGER REFERENCES pengguna (id) NOT NULL,
     kode VARCHAR(6) NOT NULL UNIQUE,
     dibuat TIMESTAMP DEFAULT NOW()
@@ -31,10 +30,13 @@ CREATE TABLE murid (
 
 CREATE TABLE post (
     id SERIAL PRIMARY KEY,
-    nama VARCHAR(128) NOT NULL,
+    nama VARCHAR(64) NOT NULL,
     deskripsi VARCHAR(255) NOT NULL,
     kode_kelas VARCHAR(6) REFERENCES kelas (kode) NOT NULL,
-    tipe tipe_materi NOT NULL
+    tipe tipe_materi NOT NULL,
+    tenggat TIMESTAMP,
+    file VARCHAR(255)[],
+    dibuat TIMESTAMP DEFAULT NOW()
 );
 
 -- +goose Down

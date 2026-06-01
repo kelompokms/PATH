@@ -14,6 +14,10 @@
             goto("/beranda");
             return;
         }
+
+        const text = await res.text();
+
+        alert(text);
     }
 </script>
 
@@ -31,11 +35,17 @@
                 <h2 class="text-2xl font-bold">Hi, Student</h2>
                 <p class="text-semibold">Welcome to PATH!</p>
                 <form class="flex flex-col gap-6" onsubmit={login}>
-                    <input placeholder="Email" type="email" name="email" />
+                    <input
+                        placeholder="Email"
+                        type="email"
+                        name="email"
+                        required
+                    />
                     <input
                         placeholder="Password"
                         type="password"
                         name="password"
+                        required
                     />
                     <a
                         href="/lupa"

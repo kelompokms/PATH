@@ -4,13 +4,7 @@
     import { get, post } from "$lib/utils/api";
     import { onMount } from "svelte";
 
-    let user = $state({});
-
-    onMount(async () => {
-        const res = await get("user");
-        console.log(res);
-        user = res;
-    });
+    let { data } = $props();
 
     async function logout() {
         const res = await post("logout", {});
@@ -46,21 +40,21 @@
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Display Name</h3>
-                    <p>{user.Nama}</p>
+                    <p>{data.Nama}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Email</h3>
-                    <p>{user.Email}</p>
+                    <p>{data.Email}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
             <div>
                 <div>
                     <h3 class="font-semibold text-lg">Phone</h3>
-                    <p>{user.Telepon}</p>
+                    <p>{data.Telepon}</p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>
             </div>
@@ -76,7 +70,7 @@
                 <div>
                     <h3 class="font-semibold text-lg">Jenis Kelamin</h3>
                     <p>
-                        {user.JenisKelamin == "l" ? "Laki-laki" : "Perempuan"}
+                        {data.JenisKelamin == "l" ? "Laki-laki" : "Perempuan"}
                     </p>
                 </div>
                 <button class="btn btn-ghost">Edit</button>

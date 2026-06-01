@@ -8,7 +8,7 @@
         { href: "chat", nama: "Chat AI" },
     ];
 
-    let { children } = $props();
+    let { children, params } = $props();
     let active = $state("");
 
     onMount(() => {
@@ -26,7 +26,7 @@
                 }}
                 role="tab"
                 class={`tab ${active == item.href ? "tab-active" : ""}`}
-                href={item.href}
+                href={"/kelas/" + params.kode + "/" + item.href}
             >
                 {item.nama}
             </a>
