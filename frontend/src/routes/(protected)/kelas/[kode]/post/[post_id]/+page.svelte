@@ -1,5 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
+    import { PUBLIC_API_URL } from "$env/static/public";
     import AngleLeft from "$lib/svg/angle-left.svelte";
     import { get } from "$lib/utils/api";
     import { onMount } from "svelte";
@@ -84,6 +85,15 @@
                     </div>
                 </div>
             {/if}
+            {#each post.File as file}
+                <a
+                    class="btn btn-outline w-fit"
+                    target="_blank"
+                    href={PUBLIC_API_URL + file.slice(1)}
+                >
+                    {file.split("/").at(-1)}</a
+                >
+            {/each}
         </div>
     </div>
 {/if}
