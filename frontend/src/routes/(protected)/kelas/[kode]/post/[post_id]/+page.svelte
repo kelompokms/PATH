@@ -18,26 +18,29 @@
 
 {#if post == undefined || post == null}
     <div
-        class="h-screen w-screen absolute left-0 top-0 p-4 flex flex-col gap-4 z-3"
+        class="overflow-auto max-w-6xl z-5 md:py-4 relative w-full h-full mx-auto"
     >
-        <div class="skeleton h-12"></div>
-        <div class="skeleton h-32"></div>
-        <div class="skeleton h-32"></div>
-        <div class="absolute left-0 bottom-0 w-full">
-            <div class="p-4">
-                <div class="skeleton h-12 w-full"></div>
-            </div>
+        <div class=" bg-white p-4 pcard h-full flex flex-col gap-4">
+            <button
+                onclick={() => goto("/kelas/" + params.kode + "/forum")}
+                class="*:first:size-6 btn btn-ghost p-2 justify-center items-center self-start"
+            >
+                <AngleLeft />
+                Kembali
+            </button>
+            <div class="h-12 skeleton"></div>
+            <div class="h-32 skeleton"></div>
+            <div class="h-32 skeleton"></div>
+            <div class="h-32 skeleton"></div>
         </div>
     </div>
 {:else}
     <div
-        class="h-screen w-screen overflow-auto absolute left-0 top-0 z-3 md:py-4"
+        class="overflow-auto max-w-6xl z-5 md:py-4 relative w-full h-full mx-auto"
     >
-        <div
-            class="md:max-w-7xl mx-auto bg-white p-4 pcard h-full flex flex-col gap-2"
-        >
+        <div class=" bg-white p-4 pcard h-full flex flex-col gap-2">
             <button
-                onclick={() => goto("/kelas/" + params.kode + "/post")}
+                onclick={() => goto("/kelas/" + params.kode + "/forum")}
                 class="*:first:size-6 btn btn-ghost p-2 justify-center items-center self-start"
             >
                 <AngleLeft />

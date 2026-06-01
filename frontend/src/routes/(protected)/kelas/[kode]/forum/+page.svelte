@@ -6,7 +6,7 @@
 
     let { data, params } = $props();
 
-    let posts = $state([]);
+    let posts = $state();
 
     onMount(async () => {
         const res = await get("class/" + params.kode + "/post");
@@ -38,7 +38,7 @@
             </button>
             {#if data.IsPengajar}
                 <button
-                    onclick={() => goto("buat")}
+                    onclick={() => goto("/kelas/" + params.kode + "/buat")}
                     class="btn btn-primary border-0 rounded-t-0"
                 >
                     Buat Postingan
@@ -52,6 +52,10 @@
         </div>
     {/if}
     {#if !posts}
+        {#each Array(3) as i}
+            <div class="skeleton h-32"></div>
+        {/each}
+    {:else if posts.length <= 0}
         <div
             class="p-4 grow content-center justify-center bg-white border-2 border-black/10 shadow-md rounded-md font-bold text-center text-black/50 flex flex-col gap-2"
         >
@@ -67,7 +71,7 @@
     {#each posts as post}
         <button
             onclick={() => goto("/kelas/" + params.kode + "/post/" + post.ID)}
-            class="text-left"
+            class="text-left border-2 border-transparent active:border-black/40 hover:border-black/20 rounded-md"
         >
             <p
                 class={`p-4 rounded-t-md border-2 border-purple-900/15 border-b-0 font-semibold text-lg md:text-2xl ${post.Tipe == "tugas" ? "bg-primary" : "bg-secondary"}`}

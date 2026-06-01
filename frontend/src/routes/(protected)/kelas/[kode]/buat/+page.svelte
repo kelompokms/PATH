@@ -9,9 +9,12 @@
     let hasTenggat = $state(false);
     const today = new Date().toISOString().slice(0, 16);
 
+    let fileUploads = $state(1);
+
     async function handleForm(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
+        console.log(formData);
         if (formData.get("tenggat")) {
             const formDate = new Date(formData.get("tenggat")).toISOString();
             formData.set("tenggat", formDate);
@@ -24,7 +27,7 @@
             return;
         }
 
-        goto("forum");
+        goto("/kelas/" + params.kode + "/forum");
     }
 </script>
 
@@ -34,7 +37,7 @@
         class="flex flex-col border-2 border-black/10 p-4 gap-4 bg-white shadow-lg rounded-lg w-full max-w-md"
     >
         <button
-            onclick={() => goto("forum")}
+            onclick={() => goto("/kelas/" + params.kode + "/forum")}
             class="btn btn-ghost pl-1 pr-2 text-lg self-start mb-2 *:first:size-6"
             ><AngleLeft />
             <span>Kembali</span>
@@ -71,6 +74,15 @@
                 required
             />
         {/if}
+        {#each Array(fileUploads) as f}
+            <input
+                type="file"
+                name="file"
+                oninput={() => {
+                    if (fileUploads <= 3) fileUploads += 1;
+                }}
+            />
+        {/each}
         <button class="btn btn-primary" type="submit">Buat Post</button>
     </form>
 </div>

@@ -14,8 +14,11 @@
     import { redirect } from "@sveltejs/kit";
     import { onMount } from "svelte";
 
+    const regex = /post|buat/;
+
     let { children } = $props();
     let isAuth = $state(false);
+    let navActive = $state(true);
     let breadcrumbs = $state([]);
 
     onMount(async () => {
@@ -24,10 +27,13 @@
         isAuth = true;
 
         breadcrumbs = getNavData(window.location.pathname);
+
+        navActive = !regex.test(window.location.pathname);
     });
 
     onNavigate((navigation) => {
         breadcrumbs = getNavData(navigation.to.url.pathname);
+        navActive = !regex.test(window.location.pathname);
     });
 
     function getNavData(pathname) {
@@ -48,30 +54,32 @@
         <input id="drawer-toggle" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col h-screen">
             <!-- Navbar -->
-            <nav class="navbar w-full shadow-md/5">
-                <label
-                    for="drawer-toggle"
-                    aria-label="open sidebar"
-                    class="btn btn-square btn-secondary btn-ghost"
-                >
-                    <Bars />
-                </label>
-                <button
-                    onclick={() => goto("/beranda")}
-                    class="btn btn-ghost px-2"
-                >
-                    <h1 class="text-3xl font-bold">PATH</h1>
-                </button>
-                {#each breadcrumbs as item}
-                    <div class="*:first:size-6 flex items-center">
-                        <AngleRight />
-                        <button
-                            onclick={() => goto(item.href)}
-                            class="btn btn-ghost p-1">{item.name}</button
-                        >
-                    </div>
-                {/each}
-            </nav>
+            {#if navActive}
+                <nav class="navbar w-full shadow-md/5">
+                    <label
+                        for="drawer-toggle"
+                        aria-label="open sidebar"
+                        class="btn btn-square btn-secondary btn-ghost"
+                    >
+                        <Bars />
+                    </label>
+                    <button
+                        onclick={() => goto("/beranda")}
+                        class="btn btn-ghost px-2"
+                    >
+                        <h1 class="text-3xl font-bold">PATH</h1>
+                    </button>
+                    {#each breadcrumbs as item}
+                        <div class="*:first:size-6 flex items-center">
+                            <AngleRight />
+                            <button
+                                onclick={() => goto(item.href)}
+                                class="btn btn-ghost p-1">{item.name}</button
+                            >
+                        </div>
+                    {/each}
+                </nav>
+            {/if}
 
             <!-- Content -->
             <div class="p-4 grow bg-purple-50 overflow-auto">

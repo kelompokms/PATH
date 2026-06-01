@@ -2,7 +2,9 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
+    let { params } = $props();
+
     onMount(() => {
-        goto(window.location.pathname + "/forum");
+        goto("/kelas/" + params.kode + "/forum");
     });
 </script>
