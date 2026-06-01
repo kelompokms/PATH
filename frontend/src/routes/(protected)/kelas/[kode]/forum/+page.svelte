@@ -45,31 +45,15 @@
                 alt="class background"
             />
         </div>
-        <!-- <div
-            class="flex flex-col border-2 rounded-md border-black/20 bg-purple-50"
-        >
-            <h2 class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-md">
-                {data.NamaKelas}
-            </h2>
-            <p class="p-4">{data.Bagian}</p>
+        {#if data.IsPengajar}
             <button
-                onclick={(event) => {
-                    navigator.clipboard.writeText(data.Kode);
-                    alert("Kode kelas berhasil disalin");
-                }}
-                class="btn btn-ghost mt-4 font-bold text-xl text-black/50"
+                onclick={() => goto("/kelas/" + params.kode + "/buat")}
+                class="btn btn-primary border-0 rounded-t-0 *:first:size-6"
             >
-                {data.Kode}
+                <Pencil />
+                <span> Buat Postingan </span>
             </button>
-            {#if data.IsPengajar}
-                <button
-                    onclick={() => goto("/kelas/" + params.kode + "/buat")}
-                    class="btn btn-primary border-0 rounded-t-0"
-                >
-                    Buat Postingan
-                </button>
-            {/if}
-        </div> -->
+        {/if}
     {:else}
         <div class="border-2 border-black/10 p-4 rounded-md shadow-md">
             <div class="font-bold text-2xl skeleton h-4"></div>
