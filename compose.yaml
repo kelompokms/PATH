@@ -14,7 +14,7 @@ services:
     build: backend
     entrypoint: /app/path_api
     networks:
-      - path_network
+      - network
     environment:
       GOOSE_DRIVER: "postgres"
       GOOSE_MIGRATION_DIR: "./internal/db/migrations"
@@ -33,13 +33,12 @@ services:
     ports:
       - 5433:5432
     restart: unless-stopped
-  frontend:
-    entrypoint: node /app/build/index.js
+  web:
     build: frontend
     networks:
       - network
     ports:
-      - 3001:3000
+      - 3001:80
 
 networks:
   network:

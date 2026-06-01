@@ -10,10 +10,5 @@ COPY . .
 RUN pnpm build
 RUN pnpm prune --production
 
-FROM node:24-alpine
-WORKDIR /app
-COPY --from=builder /app/build build/
-COPY --from=builder /app/node_modules node_modules/
-COPY package.json .
-EXPOSE 3001
-ENV NODE_ENV=production
+FROM nginx:1.30-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
