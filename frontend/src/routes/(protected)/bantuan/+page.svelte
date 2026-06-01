@@ -18,7 +18,7 @@
 </script>
 
 <main class="p-0 md:p-4">
-    <div class="bg-white">
+    <div class="bg-white max-w-7xl mx-auto">
         <h2
             class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-lg border-2 border-purple-900/10"
         >

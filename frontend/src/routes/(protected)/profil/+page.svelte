@@ -25,7 +25,7 @@
 
 <main class="p-0 md:p-4">
     {#if user}
-        <div class="bg-white">
+        <div class="bg-white max-w-7xl mx-auto">
             <h2
                 class="text-2xl font-semibold p-4 bg-purple-200 border-2 rounded-t-lg border-purple-900/10"
             >
@@ -85,9 +85,11 @@
                 </div>
             </div>
         </div>
-        <button onclick={logout} class="mt-4 btn btn-error btn-outline ml-auto"
-            >Logout</button
-        >
+        <div class="max-w-7xl mx-auto">
+            <button onclick={logout} class="mt-4 btn btn-error btn-outline"
+                >Logout</button
+            >
+        </div>
     {:else}
         <div class="w-full h-32 skeleton"></div>
     {/if}
