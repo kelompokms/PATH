@@ -24,7 +24,11 @@
             <div
                 class="flex flex-col p-10 gap-6 bg-white rounded-lg shadow-lg w-full text-center"
             >
-                <img src={Placeholder} class="rounded-full aspect-square" alt="" />
+                <img
+                    src={Placeholder}
+                    class="rounded-full aspect-square"
+                    alt=""
+                />
                 <h3 class="font-semibold text-xl text-sky-900">
                     Tidak ada Kelas
                 </h3>
@@ -42,7 +46,7 @@
                 class="card rounded-md w-100 h-min text-left shadow-md transition-all bg-purple-200 hover:bg-purple-300 active:bg-purple-400"
             >
                 <figure>
-                    <img src={Wolf} alt="" class="aspect-video" />
+                    <img src={Placeholder} alt="" class="aspect-video" />
                 </figure>
                 <div class="card-body p-3 border-2 border-purple-900/10 gap-1">
                     <h2 class="card-title">{i.NamaKelas}</h2>
