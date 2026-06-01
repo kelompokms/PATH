@@ -4,6 +4,8 @@
     import { get } from "$lib/utils/api";
     import { onMount } from "svelte";
 
+    import ClassBG from "$lib/assets/placeholder_bg.webp";
+
     let { data, params } = $props();
 
     let posts = $state();
@@ -20,7 +22,30 @@
     class="flex flex-col gap-4 p-2 max-w-7xl w-full mx-auto grow overflow-auto"
 >
     {#if data}
-        <div
+        <div class="flex flex-col bg-purple-50">
+            <div
+                class="bg-purple-200 p-4 rounded-t-md border-2 border-purple-900/20 flex justify-between items-center"
+            >
+                <div>
+                    <h2 class="text-3xl font-bold">{data.NamaKelas}</h2>
+                    <p class="mt-2 font-semibold">{data.Bagian}</p>
+                </div>
+                <button
+                    onclick={(event) => {
+                        navigator.clipboard.writeText(data.Kode);
+                        alert("Kode kelas berhasil disalin");
+                    }}
+                    class="btn btn-ghost hover:bg-purple-900/10 active:bg-purple-900/20"
+                    >{data.Kode}</button
+                >
+            </div>
+            <img
+                src={ClassBG}
+                class="h-32 object-cover rounded-b-md border-2 border-black/20 border-t-0"
+                alt="class background"
+            />
+        </div>
+        <!-- <div
             class="flex flex-col border-2 rounded-md border-black/20 bg-purple-50"
         >
             <h2 class="bg-purple-200 p-4 text-2xl font-semibold rounded-t-md">
@@ -44,7 +69,7 @@
                     Buat Postingan
                 </button>
             {/if}
-        </div>
+        </div> -->
     {:else}
         <div class="border-2 border-black/10 p-4 rounded-md shadow-md">
             <div class="font-bold text-2xl skeleton h-4"></div>

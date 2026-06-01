@@ -91,6 +91,11 @@
             >
         </div>
     {:else}
-        <div class="w-full h-32 skeleton"></div>
+        <div class="flex flex-col gap-4 max-w-7xl mx-auto">
+            <div class="w-full h-20 skeleton"></div>
+            <div class="w-full h-20 skeleton"></div>
+            <div class="w-full h-20 skeleton"></div>
+            <div class="w-full h-20 skeleton"></div>
+        </div>
     {/if}
 </main>
