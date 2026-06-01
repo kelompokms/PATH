@@ -14,8 +14,12 @@ services:
     build: backend
     entrypoint: /app/path_api
     networks:
-      - network
-    env_file: .env
+      - path_network
+    environment:
+      GOOSE_DRIVER: "postgres"
+      GOOSE_MIGRATION_DIR: "./internal/db/migrations"
+      GOOSE_DBSTRING: "postgresql://wave:123123@path-db-1:5432/path?sslmode=disable"
+      SECRET: "mypath"
     ports:
       - 3000:3000
     depends_on:
@@ -28,8 +32,6 @@ services:
       - network
     ports:
       - 5433:5432
-    volumes:
-      - pg_data:/var/lib/postgresql
     restart: unless-stopped
   frontend:
     entrypoint: node /app/build/index.js

@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>PATH AI REST API Documentation</title>
+</head>
+
+<body class="bg-[#181616] text-white/80 p-8 max-w-6xl mx-auto leading-7">
+    <header class="text-center">
+        <h1>PATH AI REST API Documentation</h1>
+    </header>
+    <main>
+        <div>
+            <hr />
+            <h2>
+                <span class="method get">get</span>
+                /
+            </h2>
+            <p>Root endpoint untuk mengecek status server.</p>
+            <pre>
+</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/tanya-tutor
+            </h2>
+            <p>
+                Endpoint untuk bertanya ke AI tutor. Mendukung percakapan
+                multi-turn dengan konteks materi.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>student_message</td>
+                    <td>Pesan/pertanyaan dari siswa (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>conversation_history</td>
+                    <td>Riwayat percakapan sebelumnya (opsional)</td>
+                    <td>list[dict]</td>
+                </tr>
+                <tr>
+                    <td>context_material</td>
+                    <td>Materi konteks untuk tutor (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>subject</td>
+                    <td>Mata pelajaran (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>topic</td>
+                    <td>Topik pembahasan (opsional)</td>
+                    <td>string</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "reply": "Tentu! Fotosintesis adalah proses ...",
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/buat-soal-quiz
+            </h2>
+            <p>
+                Generate soal quiz berdasarkan materi yang diberikan.
+                Mendukung berbagai tipe soal dan tingkat kesulitan.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>content</td>
+                    <td>Materi untuk membuat soal (min. 10 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>num_questions</td>
+                    <td>Jumlah soal, range 1-20 (default: 5)</td>
+                    <td>integer</td>
+                </tr>
+                <tr>
+                    <td>question_type</td>
+                    <td>Tipe soal: <code>multiple_choice</code>, <code>true_false</code>, <code>essay</code>,
+                        <code>short_answer</code>
+                    </td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>difficulty</td>
+                    <td>Tingkat kesulitan: <code>easy</code>, <code>medium</code>, <code>hard</code></td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>topic</td>
+                    <td>Topik materi (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>skip_validation</td>
+                    <td>Skip validasi LLM (default: false)</td>
+                    <td>boolean</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "quiz": {
+        "title": "Quiz Fotosintesis",
+        "subject": "",
+        "topic": "Fotosintesis",
+        "total_questions": 5,
+        "questions": [
+            {
+                "question_id": 1,
+                "question": "Apa hasil utama fotosintesis?",
+                "question_type": "multiple_choice",
+                "options": [
+                    { "label": "A", "text": "Glukosa", "is_correct": true },
+                    { "label": "B", "text": "Protein", "is_correct": false }
+                ],
+                "correct_answer": "A",
+                "explanation": "...",
+                "difficulty": "medium",
+                "concept_tag": "fotosintesis"
+            }
+        ],
+        "summary": "..."
+    },
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/upload-dan-extract
+            </h2>
+            <p>
+                Upload file dokumen dan ekstrak teks dari dalamnya.
+                Mendukung berbagai format file.
+                Content-Type: <code>multipart/form-data</code>.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>file</td>
+                    <td>File dokumen yang akan diekstrak (wajib)</td>
+                    <td>UploadFile (multipart)</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "text": "Isi teks yang diekstrak dari dokumen...",
+    "text_length": 4949,
+    "image_count": 3,
+    "page_count": 10,
+    "source": "materi.pdf"
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/buat-soal-diagnostic
+            </h2>
+            <p>
+                Generate soal diagnostic untuk mengukur pemahaman awal siswa.
+                Soal diagnostic lebih singkat dan digunakan untuk klasifikasi sinyal.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>content</td>
+                    <td>Materi untuk diagnostic (min. 10 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>num_questions</td>
+                    <td>Jumlah soal, range 1-10 (default: 3)</td>
+                    <td>integer</td>
+                </tr>
+                <tr>
+                    <td>topic</td>
+                    <td>Topik materi (opsional)</td>
+                    <td>string</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "quiz": {
+        "title": "Diagnostic: Fotosintesis",
+        "total_questions": 3,
+        "questions": [ ... ]
+    },
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/nilai-satu-jawaban
+            </h2>
+            <p>
+                Menilai satu jawaban siswa. Memberikan feedback, skor,
+                dan identifikasi miskonsepsi.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>question</td>
+                    <td>Teks soal (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>correct_answer</td>
+                    <td>Jawaban yang benar (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>student_answer</td>
+                    <td>Jawaban siswa (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>concept_tag</td>
+                    <td>Tag konsep terkait (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>question_type</td>
+                    <td>Tipe soal (default: <code>multiple_choice</code>)</td>
+                    <td>string</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "feedback": {
+        "question_id": 0,
+        "student_answer": "B",
+        "correct_answer": "A",
+        "is_correct": false,
+        "score": 0,
+        "explanation": "Jawaban yang benar adalah A karena...",
+        "misconceptions": [
+            {
+                "concept": "Fotosintesis",
+                "student_thinking": "Siswa mengira...",
+                "correct_understanding": "Sebenarnya...",
+                "severity": "medium"
+            }
+        ],
+        "concept_feedback": "..."
+    },
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/nilai-semua-jawaban
+            </h2>
+            <p>
+                Menilai semua jawaban quiz sekaligus (batch grading).
+                Mengembalikan hasil keseluruhan, area lemah/kuat, dan trigger remedial.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>student_id</td>
+                    <td>ID siswa (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>quiz_id</td>
+                    <td>ID quiz (min. 1 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>questions_and_answers</td>
+                    <td>List soal dan jawaban: <code>{question, correct_answer, student_answer, concept_tag}</code>
+                        (wajib)</td>
+                    <td>list[dict]</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "result": {
+        "student_id": "siswa-001",
+        "quiz_id": "quiz-001",
+        "total_score": 60.0,
+        "total_correct": 3,
+        "total_questions": 5,
+        "status": "remedial",
+        "feedback": [ ... ],
+        "weak_areas": ["fotosintesis", "respirasi"],
+        "strong_areas": ["sel"]
+    },
+    "remedial": {
+        "needs_remedial": true,
+        "score": 60.0,
+        "threshold": 75.0,
+        "weak_concepts": ["fotosintesis"],
+        "misconceptions": [ ... ],
+        "recommended_action": "ai_summary_card"
+    },
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/sederhanakan-materi
+            </h2>
+            <p>
+                Menyederhanakan materi sesuai jenjang target.
+                Mode <code>simplifier</code> untuk jalur kuning (butuh dukungan),
+                mode <code>fast-track</code> untuk jalur hijau.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>content</td>
+                    <td>Materi yang akan disederhanakan (min. 10 karakter, wajib)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>mode</td>
+                    <td><code>simplifier</code> (jalur kuning) atau <code>fast-track</code> (jalur hijau)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>target_level</td>
+                    <td>Jenjang target: <code>SD</code>, <code>SMP</code>, <code>SMA</code> (default: SMA)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>topic</td>
+                    <td>Topik materi (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>weak_concepts</td>
+                    <td>Konsep lemah dari diagnostic, hanya untuk mode simplifier (opsional)</td>
+                    <td>list[string]</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "simplified_content": "Materi yang sudah disederhanakan...",
+    "metadata": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/klasifikasi-sinyal
+            </h2>
+            <p>
+                Mengklasifikasi hasil diagnostic menjadi sinyal
+                <code>green</code> (fast-track) atau <code>yellow</code> (butuh dukungan).
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>student_id</td>
+                    <td>ID siswa (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>answers</td>
+                    <td>List jawaban diagnostic: <code>{question_id, student_answer, is_correct, concept_tag}</code>
+                        (wajib)</td>
+                    <td>list[dict]</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "student_id": "siswa-001",
+    "signal": "yellow",
+    "answers": [ ... ],
+    "correct_count": 1,
+    "total_count": 3,
+    "weak_concepts": ["fotosintesis"],
+    "recommended_path": "support"
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/buat-remedial
+            </h2>
+            <p>
+                Generate konten remedial untuk siswa yang skornya di bawah threshold.
+                Jika skor di atas threshold, endpoint akan skip dan tidak generate konten.
+            </p>
+            <h3>Argumen</h3>
+            <table>
+                <tr>
+                    <th>nama</th>
+                    <th>deskripsi</th>
+                    <th>tipe</th>
+                </tr>
+                <tr>
+                    <td>score</td>
+                    <td>Skor siswa, range 0-100 (wajib)</td>
+                    <td>float</td>
+                </tr>
+                <tr>
+                    <td>threshold</td>
+                    <td>Batas minimum lulus (default: 75.0)</td>
+                    <td>float</td>
+                </tr>
+                <tr>
+                    <td>weak_concepts</td>
+                    <td>List konsep yang lemah (opsional)</td>
+                    <td>list[string]</td>
+                </tr>
+                <tr>
+                    <td>misconceptions</td>
+                    <td>List miskonsepsi: <code>{concept, student_thinking, correct_understanding, severity}</code></td>
+                    <td>list[dict]</td>
+                </tr>
+                <tr>
+                    <td>original_content</td>
+                    <td>Materi asli sebagai referensi (opsional)</td>
+                    <td>string</td>
+                </tr>
+                <tr>
+                    <td>student_level</td>
+                    <td>Jenjang siswa (default: <code>SMA</code>)</td>
+                    <td>string</td>
+                </tr>
+            </table>
+            <h3>Contoh Response</h3>
+            <p>Jika skor &lt; threshold:</p>
+            <pre>
+{
+    "remedial_content": "Konten remedial yang di-generate...",
+    "metadata": { ... }
+}</pre>
+            <p>Jika skor &gt;= threshold:</p>
+            <pre>
+{
+    "remedial_content": "",
+    "skipped": true
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method get">get</span>
+                /path-ai/lihat-pemakaian
+            </h2>
+            <p>
+                Melihat statistik pemakaian token dan estimasi biaya.
+            </p>
+            <h3>Argumen</h3>
+            <p><i>Tidak ada argumen.</i></p>
+            <h3>Contoh Response</h3>
+            <pre>
+{
+    "tokens": { ... },
+    "cost": { ... }
+}</pre>
+        </div>
+
+        <div>
+            <hr />
+            <h2>
+                <span class="method post">post</span>
+                /path-ai/generate-semua-konten
+            </h2>
+            <p>
+                Jadi gini twin, ini tuh aku penasaran aja kalau langsung digabungin dari sini bagaimana ternyata
+                malah bikin berat di request jadinya GAUSAH DIPAKE :3
+            </p>
+        </div>
+
+        <div>
+            <hr />
+            <h2>Error Responses</h2>
+            <p>Semua endpoint dapat mengembalikan error berikut:</p>
+            <table>
+                <tr>
+                    <th>kode status</th>
+                    <th>isi</th>
+                    <th>alasan</th>
+                </tr>
+                <tr>
+                    <td>400</td>
+                    <td>Bad Request</td>
+                    <td>Input tidak valid atau file tidak didukung</td>
+                </tr>
+                <tr>
+                    <td>422</td>
+                    <td>Validation Error</td>
+                    <td>Field wajib tidak diisi atau format salah</td>
+                </tr>
+                <tr>
+                    <td>429</td>
+                    <td>Model sedang sibuk (rate limited)</td>
+                    <td>Terlalu banyak request ke AI model</td>
+                </tr>
+                <tr>
+                    <td>500</td>
+                    <td>Internal Server Error</td>
+                    <td>Gagal generate / proses di server</td>
+                </tr>
+                <tr>
+                    <td>502</td>
+                    <td>Gagal menghubungi AI model</td>
+                    <td>Error dari OpenRouter API</td>
+                </tr>
+                <tr>
+                    <td>503</td>
+                    <td>Model sedang tidak tersedia</td>
+                    <td>AI model down / maintenance</td>
+                </tr>
+            </table>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 <script>
     import { goto } from "$app/navigation";
-    import Wolf from "$lib/assets/wolf.webp";
+    import Placeholder from "$lib/assets/placeholder_bg.webp";
 </script>
 
 <main class="flex justify-center items-center">
@@ -9,7 +9,7 @@
             <!-- Gambar Di sini -->
             <img
                 class="aspect-square rounded-full mb-4"
-                src={Wolf}
+                src={Placeholder}
                 alt="gambar beranda"
             />
             <p class="text-md font-semibold">
