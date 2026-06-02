@@ -9,6 +9,7 @@
 
     let post = $state();
     let materi = $state();
+    let isProcessing = $state(false);
 
     onMount(async () => {
         const res = await get(
@@ -26,39 +27,66 @@
         });
         const fileBlob = await fileRes.blob();
         let formData = new FormData();
-        formData.append("file", fileBlob);
-        console.log(formData);
+        formData.append("file", fileBlob, fileName);
 
         const materiRes = await fetch(PUBLIC_AI_URL + "upload-dan-extract", {
             method: "POST",
             body: formData,
         });
+
         const materiJson = await materiRes.json();
         const materiText = materiJson.text;
 
+        isProcessing = true;
         const sederhanaRes = await fetch(
             PUBLIC_AI_URL + "sederhanakan-materi",
             {
+                headers: { "Content-type": "application/json" },
                 method: "POST",
                 body: JSON.stringify({ content: materiText }),
             },
         );
+
         const sederhanaJson = await sederhanaRes.json();
-        let formatted = sederhanaJson.text
+        let formatted = sederhanaJson.simplified_content
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
             .replace(/\$\\rightarrow\$/g, " ➔ ")
-            .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+            .replace(/^### (.*$)/gim, `<h3 class="font-bold text-xl">$1</h3>`)
             .replace(/^---$/gim, "<hr />")
-            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-            .replace(/`(.*?)`/g, "<code>$1</code>")
+            .replace(/\*\*(.*?)\*\*/g, `<strong class="font-bold">$1</strong>`)
+            .replace(/`(.*?)`/g, `<code>$1</code>`)
             .replace(/^\s*[\*\-]\s+(.*$)/gim, "<ul><li>$1</li></ul>")
             .replace(/^\s*\d+\.\s+(.*$)/gim, "<ol><li>$1</li></ol>")
             .replace(/\n/g, "<br>");
         materi = formatted;
     }
 </script>
+
+{#if isProcessing}
+    <div
+        class="absolute w-full h-full left-0 top-0 z-10 flex flex-col justify-center p-10 bg-purple-100"
+    >
+        <div
+            class="bg-white border-2 border-black/10 p-4 rounded-lg max-w-6xl mx-auto flex flex-col"
+        >
+            <button
+                onclick={() => (isProcessing = false)}
+                class="btn btn-ghost w-fit">X Tutup</button
+            >
+            {#if materi}
+                <p>
+                    {@html materi}
+                </p>
+            {:else}
+                <div class="mx-auto p-10 px-20">
+                    <span class="loading loading-dots loading-lg"></span>
+                </div>
+            {/if}
+        </div>
+    </div>
+{/if}
 
 {#if post == undefined || post == null}
     <div
