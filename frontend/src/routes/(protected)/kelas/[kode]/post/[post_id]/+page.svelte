@@ -1,13 +1,14 @@
 <script>
     import { goto } from "$app/navigation";
-    import { PUBLIC_API_URL } from "$env/static/public";
     import AngleLeft from "$lib/svg/angle-left.svelte";
     import { get } from "$lib/utils/api";
     import { onMount } from "svelte";
+    import { PUBLIC_AI_URL, PUBLIC_API_URL } from "$env/static/public";
 
     let { params } = $props();
 
     let post = $state();
+    let materi = $state();
 
     onMount(async () => {
         const res = await get(
@@ -15,6 +16,48 @@
         );
         post = res;
     });
+
+    async function sederhanakanMateri(file) {
+        const fileURL = PUBLIC_API_URL + file.slice(1);
+        const fileName = file.split("/").at(-1);
+
+        const fileRes = await fetch(fileURL, {
+            credentials: "include",
+        });
+        const fileBlob = await fileRes.blob();
+        let formData = new FormData();
+        formData.append("file", fileBlob);
+        console.log(formData);
+
+        const materiRes = await fetch(PUBLIC_AI_URL + "upload-dan-extract", {
+            method: "POST",
+            body: formData,
+        });
+        const materiJson = await materiRes.json();
+        const materiText = materiJson.text;
+
+        const sederhanaRes = await fetch(
+            PUBLIC_AI_URL + "sederhanakan-materi",
+            {
+                method: "POST",
+                body: JSON.stringify({ content: materiText }),
+            },
+        );
+        const sederhanaJson = await sederhanaRes.json();
+        let formatted = sederhanaJson.text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/\$\\rightarrow\$/g, " ➔ ")
+            .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+            .replace(/^---$/gim, "<hr />")
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/`(.*?)`/g, "<code>$1</code>")
+            .replace(/^\s*[\*\-]\s+(.*$)/gim, "<ul><li>$1</li></ul>")
+            .replace(/^\s*\d+\.\s+(.*$)/gim, "<ol><li>$1</li></ol>")
+            .replace(/\n/g, "<br>");
+        materi = formatted;
+    }
 </script>
 
 {#if post == undefined || post == null}
@@ -86,13 +129,22 @@
                 </div>
             {/if}
             {#each post.File as file}
-                <a
-                    class="btn btn-outline w-fit"
-                    target="_blank"
-                    href={PUBLIC_API_URL + file.slice(1)}
-                >
-                    {file.split("/").at(-1)}</a
-                >
+                <div class="flex justify-between">
+                    <a
+                        class="btn btn-outline w-fit"
+                        target="_blank"
+                        href={PUBLIC_API_URL + file.slice(1)}
+                    >
+                        {file.split("/").at(-1)}</a
+                    >
+                    <button
+                        onclick={() => sederhanakanMateri(file)}
+                        class="btn btn-primary">Sederhanakan</button
+                    >
+                </div>
+                {#if materi}
+                    {@html materi}
+                {/if}
             {/each}
         </div>
     </div>
