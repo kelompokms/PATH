@@ -69,7 +69,7 @@
         class="absolute w-full h-full left-0 top-0 z-10 flex flex-col justify-center p-10 bg-purple-100"
     >
         <div
-            class="bg-white border-2 border-black/10 p-4 rounded-lg max-w-6xl mx-auto flex flex-col"
+            class="bg-white border-2 border-black/10 p-4 rounded-lg max-w-6xl mx-auto flex flex-col overflow-auto"
         >
             <button
                 onclick={() => (isProcessing = false)}
