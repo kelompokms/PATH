@@ -29,7 +29,7 @@
         let formData = new FormData();
         formData.append("file", fileBlob, fileName);
 
-        const materiRes = await fetch(PUBLIC_AI_URL + "upload-dan-extract", {
+        const materiRes = await fetch(PUBLIC_AI_URL + "path-ai/" + "upload-dan-extract", {
             method: "POST",
             body: formData,
         });
@@ -39,7 +39,7 @@
 
         isProcessing = true;
         const sederhanaRes = await fetch(
-            PUBLIC_AI_URL + "sederhanakan-materi",
+            PUBLIC_AI_URL + "path-ai/" + "sederhanakan-materi",
             {
                 headers: { "Content-type": "application/json" },
                 method: "POST",
